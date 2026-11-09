@@ -1548,7 +1548,7 @@ const TELEGRAM_BOT_TOKEN = "9268752637:AAE5Jw77RShF8IRugM_baYhRoZAu6LuRWEE";
       const skipBtn = document.getElementById('skipPrintAnimBtn');
       if (skipBtn) skipBtn.classList.remove('hidden');
 
-      showToast('Mesin kasir Mimin Archie sedang mencetak struk & tiket garansi Kakak... 🖨️🎟️', 'camHappy');
+      showToast('Mesin kasir lagi nyetak bill & tiket garansi Kakak 🖨️🎟️', 'camHappy');
 
       const schedule = [
         { ms: 180, band: 'gBand1', units: ['gUnit1'] },
@@ -1577,7 +1577,7 @@ const TELEGRAM_BOT_TOKEN = "9268752637:AAE5Jw77RShF8IRugM_baYhRoZAu6LuRWEE";
           isPrintingBill = false;
           if (skipBtn) skipBtn.classList.add('hidden');
           launchConfetti(22);
-          showToast(`Struk & Tiket Garansi ${activeOrder ? activeOrder.orderCode : ''} selesai dicetak! 🌸`, 'camWink');
+          showToast(`Bill & Tiket suda ${activeOrder ? activeOrder.orderCode : ''} selesai dicetak! 🌸`, 'camWink');
         } }
       ];
 
