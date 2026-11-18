@@ -991,7 +991,7 @@
             <div class="my-2 flex items-center justify-center">
               <div id="claimWarrantyActionBtn" class="focus:outline-none">
                 <div id="bigRubberStamp" class="big-warranty-stamp stamp-unclaimed">
-                  <span id="stampTopEyebrow" class="text-[7.5px] font-bold tracking-widest opacity-85">★ ARCHIE'PELAGO WARRANTY ★</span>
+                  <span id="stampTopEyebrow" class="text-[7.5px] font-bold tracking-widest opacity-85">🌸 ARCHIE'PELAGO WARRANTY 🌸</span>
                   <span id="stampMainTitle" class="text-xs sm:text-sm font-black tracking-wider mt-0.5">BELUM DIKLAIM</span>
                 </div>
               </div>
@@ -2300,5 +2300,949 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
     })();
 
   </script>
+
+<script>window.ARCHIE_SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";window.ARCHIE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0cGdhbnhwdHlheGV5ZHF4bmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1NTEwNzAsImV4cCI6MjEwOTEyNzA3MH0.q5PAMDapOT3KLnvq7GXas_j1ZZHjBGEvKO-3WfbjkJg";</script>
+<script>
+// ============================================================================
+// ARCHIE'PELAGO FINAL PRODUCTION — SHARED LIVE CMS LOADER & 68-APP DEFAULTS
+// (Zero Demo Data • Zero Mock Orders • Zero Converter Teks)
+// ============================================================================
+(function() {
+  if (window.__ARCHIE_PROD_CMS_LOADED__) return;
+  window.__ARCHIE_PROD_CMS_LOADED__ = true;
+
+  var DEFAULT_PORTAL_BASE = ['https:/', 's.id', 'archie-garansi'].join('/');
+
+  var DEFAULT_CATALOG = [
+    { id: 'netflix', cat: 'populer', subCat: 'streaming', badge: '🎬', labelBadge: 'Terlaris', stockStatus: 'READY', name: 'NETFLIX PREMIUM UHD 4K', subtitle: '4K HDR Anti-Limit • Garansi Full', minAgreed: 16000, idealBase: 18000, fhCost: 11500, fhName: 'FH Utama', tag: '#NF-01',
+      tncPoints: [
+        'Wajib gunakan di 1 perangkat sesuai profil yang diberikan Mimin.',
+        'Dilarang mengubah PIN, pengaturan profil, atau email/sandi akun.',
+        'Jika muncul peringatan Household, jangan logout dan langsung kirim SS ke WA Mimin.'
+      ],
+      plans: [
+        { label: 'Sharing 1P2U • 1 Bulan', price: 18000, minAgreed: 16000, fhCost: 11500, tip: '1 Profil dipakai bersama 2 user, wajib pakai di 1 device & dilarang ubah PIN.' },
+        { label: 'Sharing 1P1U • 1 Bulan', price: 28000, minAgreed: 25000, fhCost: 19000, tip: '1 Profil khusus milik kakak sendiri, bebas pasang PIN & anti ke-kick.' },
+        { label: 'Semi Private • 1 Bulan', price: 54000, minAgreed: 48000, fhCost: 37000, tip: 'Akses 2 device sekaligus dengan profil khusus milik kakak sendiri.' },
+        { label: 'Private Full Akun • 1 Bulan', price: 135000, minAgreed: 125000, fhCost: 105000, tip: '1 Akun utuh 5 profil khusus milik kakak sendiri, bebas atur semua profil.' }
+      ]
+    },
+    { id: 'youtube', cat: 'populer', subCat: 'streaming', badge: '▶️', labelBadge: 'Favorit', stockStatus: 'READY', name: 'YOUTUBE PREMIUM + MUSIC', subtitle: 'Bebas Iklan + Background Play + YT Music', minAgreed: 14000, idealBase: 16000, fhCost: 7000, fhName: 'FH Utama', tag: '#YT-04',
+      tncPoints: [
+        'Untuk Invite Family wajib email tidak berpindah family dalam 12 bulan terakhir.',
+        'Untuk Indplan wajib simpan informasi akun yang diberikan Mimin.'
+      ],
+      plans: [
+        { label: 'Invite Family • 1 Bulan', price: 16000, minAgreed: 14000, fhCost: 7000, tip: 'Pakai akun pribadi kakak sendiri via undangan Family resmi.' },
+        { label: 'Sharing 1P1U Indplan • 1 Bulan', price: 18000, minAgreed: 16000, fhCost: 8500, tip: '1 Akun Individual Plan dari Mimin, bebas limit riwayat family.' },
+        { label: 'Private Indplan • 3 Bulan', price: 48000, minAgreed: 45000, fhCost: 26000, tip: 'Akun Private Individual 3 bulan penuh dengan jaminan perpanjangan aman.' },
+        { label: 'Sharing Family • 1 Tahun', price: 110000, minAgreed: 100000, fhCost: 65000, tip: 'Paket hemat 12 bulan penuh dengan jaminan garansi refill bulanan.' }
+      ]
+    },
+    { id: 'spotify', cat: 'populer', subCat: 'musik', badge: '🎧', labelBadge: 'Populer', stockStatus: 'READY', name: 'SPOTIFY PREMIUM', subtitle: 'Audio Jernih • Bebas Shuffle & Offline', minAgreed: 14500, idealBase: 16000, fhCost: 9000, fhName: 'FH Utama', tag: '#SP-03',
+      tncPoints: [
+        'Dilarang mengubah alamat atau region pada pengaturan Family Plan.',
+        'Jika terkeluar dari Family, kirim SS ke Mimin untuk re-invite dalam 1x24 jam.'
+      ],
+      plans: [
+        { label: 'Sharing Family • 1 Bulan', price: 16000, minAgreed: 14500, fhCost: 9000, tip: 'Masuk grup Family Premium, playlist & akun tetap milik kakak sendiri.' },
+        { label: 'Individual Private • 1 Bulan', price: 24000, minAgreed: 22000, fhCost: 15000, tip: 'Akun Individual Private anti mental family, bebas dengar offline.' },
+        { label: 'Individual Private • 3 Bulan', price: 68000, minAgreed: 62000, fhCost: 45000, tip: 'Paket 3 bulan Individual Private dengan garansi penuh.' }
+      ]
+    },
+    { id: 'canva_ai', cat: 'populer', subCat: 'editing', badge: '🎨', labelBadge: 'Best Value', stockStatus: 'READY', name: 'CANVA PRO EDU / TEAMS', subtitle: 'Elemen Pro, Brand Kit & Magic Studio AI', minAgreed: 9000, idealBase: 10000, fhCost: 3500, fhName: 'FH Utama', tag: '#CV-02',
+      tncPoints: [
+        'Garansi mencakup durasi akses fitur Pro (bukan backup file desain).',
+        'Wajib cadangkan desain penting secara berkala ke akun pribadi atau perangkat lokal.'
+      ],
+      plans: [
+        { label: 'Canva Pro Invite • 1 Hari', price: 2500, minAgreed: 2000, fhCost: 800, tip: 'Akses kilat 24 jam penuh seluruh fitur Canva Pro.' },
+        { label: 'Canva Pro Invite • 1 Bulan', price: 10000, minAgreed: 9000, fhCost: 3500, tip: 'Menggunakan akun Canva kakak sendiri via link undangan tim resmi.' },
+        { label: 'Canva Pro Invite • 6 Bulan', price: 28000, minAgreed: 25000, fhCost: 11000, tip: 'Akses 6 bulan penuh dengan garansi re-invite jika tim berganti.' },
+        { label: 'Canva Pro Invite • 1 Tahun', price: 45000, minAgreed: 40000, fhCost: 18000, tip: 'Paket 1 tahun favorit desainer lengkap dengan garansi re-invite.' }
+      ]
+    },
+    { id: 'chatgpt', cat: 'populer', subCat: 'ai', badge: '🤖', labelBadge: 'AI Pro', stockStatus: 'READY', name: 'CHATGPT PLUS (GPT-4o / o3)', subtitle: 'Akses Model Flagship, Upload File & DALL-E', minAgreed: 29000, idealBase: 32000, fhCost: 19000, fhName: 'FH Utama', tag: '#CG-05',
+      tncPoints: [
+        'Dilarang menghapus riwayat chat pengguna lain pada akun Sharing.',
+        'Dilarang mengubah pengaturan keamanan/2FA akun.',
+        'Gunakan fitur Temporary Chat untuk menjaga privasi dokumen kakak.'
+      ],
+      plans: [
+        { label: 'Sharing 5 User • 1 Bulan', price: 32000, minAgreed: 29000, fhCost: 19000, tip: '1 Akun Plus dipakai bersama 5 user tertib, hemat untuk tugas harian.' },
+        { label: 'Sharing 3 User • 1 Bulan', price: 45000, minAgreed: 41000, fhCost: 27000, tip: 'Slot longgar hanya 3 user, kuota prompt GPT-4o jauh lebih lega.' },
+        { label: 'Private Workspace • 1 Bulan', price: 145000, minAgreed: 135000, fhCost: 110000, tip: 'Workspace pribadi 100% privasi aman tanpa terlihat user lain.' }
+      ]
+    },
+    { id: 'capcut', cat: 'populer', subCat: 'editing', badge: '✂️', labelBadge: 'Creator', stockStatus: 'READY', name: 'CAPCUT PRO FULL AKSES', subtitle: 'Efek Pro, Auto Captions & Cloud Export 4K', minAgreed: 14000, idealBase: 16000, fhCost: 8500, fhName: 'FH Utama', tag: '#CC-01',
+      tncPoints: [
+        'Wajib masuk di 1 perangkat saja.',
+        'Jangan simpan draft mentah di Cloud Space bersama agar tidak tertimpa.'
+      ],
+      plans: [
+        { label: 'Sharing 1P2U • 1 Bulan', price: 16000, minAgreed: 14000, fhCost: 8500, tip: 'Akun CapCut Pro siap pakai untuk 1 device HP/PC.' },
+        { label: 'Sharing 1P1U • 1 Bulan', price: 24000, minAgreed: 21500, fhCost: 14000, tip: 'Slot khusus 1 device milik kakak sendiri, bebas mental.' },
+        { label: 'Private Full • 1 Bulan', price: 38000, minAgreed: 35000, fhCost: 25000, tip: '1 Akun CapCut Pro Private khusus untuk kakak sendiri.' }
+      ]
+    },
+    { id: 'disney', cat: 'streaming', subCat: 'streaming', badge: '🏰', stockStatus: 'READY', name: 'DISNEY+ HOTSTAR PREMIUM', subtitle: 'Marvel, Disney, Pixar & Korea 4K', minAgreed: 21000, idealBase: 24000, fhCost: 15000, fhName: 'FH Utama', tag: '#DS-01',
+      tncPoints: ['Masuk via OTP dari Mimin. Wajib 1 layar aktif & dilarang keluar akun sembarangan.'],
+      plans: [
+        { label: 'Sharing 6U • 1 Bulan', price: 24000, minAgreed: 21000, fhCost: 15000, tip: 'Masuk via OTP Mimin, wajib hanya 1 layar aktif saat menonton.' },
+        { label: 'Sharing 3U • 1 Bulan', price: 36000, minAgreed: 33000, fhCost: 24000, tip: 'Hanya 3 user dalam 1 akun, bebas bentrok jam tayang.' }
+      ]
+    },
+    { id: 'prime_video', cat: 'streaming', subCat: 'streaming', badge: '📺', stockStatus: 'READY', name: 'AMAZON PRIME VIDEO UHD', subtitle: 'Series Eksklusif & Anime 4K', minAgreed: 12000, idealBase: 14000, fhCost: 7000, fhName: 'FH Utama', tag: '#PV-01',
+      tncPoints: ['Gunakan profil sesuai nomor dari Mimin & dilarang menyewa film berbayar tambahan.'],
+      plans: [
+        { label: 'Sharing 1P1U • 1 Bulan', price: 14000, minAgreed: 12000, fhCost: 7000, tip: '1 Profil khusus milik kakak sendiri, resolusi UHD.' },
+        { label: 'Private Full • 1 Bulan', price: 28000, minAgreed: 25000, fhCost: 17000, tip: '1 Akun Prime Video utuh milik kakak sendiri.' }
+      ]
+    },
+    { id: 'viu', cat: 'streaming', subCat: 'streaming', badge: '🇰🇷', stockStatus: 'READY', name: 'VIU PREMIUM ANTI IKLAN', subtitle: 'Drakor & Variety Show Korea Tercepat', minAgreed: 10000, idealBase: 12000, fhCost: 5000, fhName: 'FH Utama', tag: '#VU-01',
+      tncPoints: ['Gunakan maksimal di 1 device & dilarang mengubah pengaturan akun.'],
+      plans: [
+        { label: 'Private • 1 Bulan', price: 12000, minAgreed: 10000, fhCost: 5000, tip: '1 Akun Viu Private bebas iklan selama 1 bulan.' },
+        { label: 'Private • 6 Bulan', price: 25000, minAgreed: 22000, fhCost: 11000, tip: 'Paket hemat 6 bulan Drakor sepuasnya.' },
+        { label: 'Private • 1 Tahun', price: 35000, minAgreed: 31000, fhCost: 15000, tip: 'Paket 1 tahun penuh dengan garansi resmi.' }
+      ]
+    },
+    { id: 'vidio', cat: 'streaming', subCat: 'streaming', badge: '⚽', stockStatus: 'READY', name: 'VIDIO PLATINUM / DIAMOND', subtitle: 'Liga Inggris, UCL, Timnas & Sinetron', minAgreed: 22000, idealBase: 25000, fhCost: 16500, fhName: 'FH Utama', tag: '#VD-01',
+      tncPoints: ['Wajib 1 layar sesuai tipe device (Mobile/All Screen) & dilarang menonton bersamaan di 2 layar.'],
+      plans: [
+        { label: 'Platinum Mobile • 1 Bulan', price: 25000, minAgreed: 22000, fhCost: 16500, tip: 'Khusus layar HP/Tablet, bebas nonton UCL & BRI Liga 1.' },
+        { label: 'Platinum All Screen • 1 Bulan', price: 36000, minAgreed: 33000, fhCost: 25000, tip: 'Bisa digunakan di Smart TV, Laptop, maupun HP.' },
+        { label: 'Diamond EPL • 1 Bulan', price: 68000, minAgreed: 62000, fhCost: 52000, tip: 'Paket lengkap Liga Inggris (EPL) + semua channel Platinum.' }
+      ]
+    },
+    { id: 'wetv', cat: 'streaming', subCat: 'streaming', badge: '🏮', stockStatus: 'READY', name: 'WETV VIP EXPRESS', subtitle: 'Drachin & Series Lokal Episode Lebih Cepat', minAgreed: 12000, idealBase: 14000, fhCost: 7500, fhName: 'FH Utama', tag: '#WT-01',
+      tncPoints: ['Maksimal 1 device & dilarang mengubah profil akun.'],
+      plans: [
+        { label: 'Sharing 1P1U • 1 Bulan', price: 14000, minAgreed: 12000, fhCost: 7500, tip: '1 Slot VIP khusus untuk 1 device kakak.' },
+        { label: 'Private VIP • 1 Bulan', price: 28000, minAgreed: 25000, fhCost: 18000, tip: 'Akun WeTV VIP Private khusus milik kakak sendiri.' }
+      ]
+    },
+    { id: 'iqiyi', cat: 'streaming', subCat: 'streaming', badge: '🐉', stockStatus: 'READY', name: 'IQIYI VIP STANDARD / PREMIUM', subtitle: 'Drachin & Anime 1080P/4K Dolby', minAgreed: 13000, idealBase: 15000, fhCost: 8000, fhName: 'FH Utama', tag: '#IQ-01',
+      tncPoints: ['Wajib 1 device saja.'],
+      plans: [
+        { label: 'Sharing • 1 Bulan', price: 15000, minAgreed: 13000, fhCost: 8000, tip: 'Akses VIP 1080P untuk 1 device.' },
+        { label: 'Private • 1 Bulan', price: 29000, minAgreed: 26000, fhCost: 19000, tip: 'Akun Private iQIYI VIP 1 bulan.' }
+      ]
+    },
+    { id: 'bstation', cat: 'streaming', subCat: 'streaming', badge: '👾', stockStatus: 'READY', name: 'BSTATION / BILIBILI PREMIUM', subtitle: 'Anime Legal 1080P 60FPS Tanpa Iklan', minAgreed: 12000, idealBase: 14000, fhCost: 7500, fhName: 'FH Utama', tag: '#BS-01',
+      tncPoints: ['Gunakan di 1 device saja.'],
+      plans: [
+        { label: 'Sharing 1P1U • 1 Bulan', price: 14000, minAgreed: 12000, fhCost: 7500, tip: 'Streaming anime 1080P 60fps di 1 device.' },
+        { label: 'Sharing • 3 Bulan', price: 32000, minAgreed: 29000, fhCost: 19000, tip: 'Paket 3 bulan hemat untuk pecinta anime.' }
+      ]
+    },
+    { id: 'claude', cat: 'ai', subCat: 'ai', badge: '🧠', stockStatus: 'READY', name: 'CLAUDE 3.7 SONNET PRO', subtitle: 'AI Coding, Penulisan Ilmiah & Analisis Dokumen', minAgreed: 42000, idealBase: 48000, fhCost: 31000, fhName: 'FH Utama', tag: '#CL-01',
+      tncPoints: ['Dilarang spam prompt otomatis atau API scraper agar akun tidak terkena rate-limit.'],
+      plans: [
+        { label: 'Sharing 4 User • 1 Bulan', price: 48000, minAgreed: 42000, fhCost: 31000, tip: 'Akses Claude Pro bersama 4 user tertib.' },
+        { label: 'Private Pro • 1 Bulan', price: 165000, minAgreed: 150000, fhCost: 128000, tip: 'Akun Claude Pro Private khusus milik kakak sendiri.' }
+      ]
+    },
+    { id: 'perplexity', cat: 'ai', subCat: 'ai', badge: '🔎', stockStatus: 'READY', name: 'PERPLEXITY AI PRO', subtitle: 'Riset Jurnal Ilmiah, Sitasi Real-Time & Multi-Model', minAgreed: 25000, idealBase: 28000, fhCost: 17000, fhName: 'FH Utama', tag: '#PX-01',
+      tncPoints: ['Gunakan Spaces pribadi & jangan hapus riwayat riset user lain.'],
+      plans: [
+        { label: 'Sharing Pro • 1 Bulan', price: 28000, minAgreed: 25000, fhCost: 17000, tip: 'Bebas pilih model GPT-4o, Claude Sonnet & DeepSeek R1.' },
+        { label: 'Private Pro • 1 Bulan', price: 75000, minAgreed: 68000, fhCost: 52000, tip: 'Akun Perplexity Pro Private 1 bulan.' }
+      ]
+    },
+    { id: 'gemini_adv', cat: 'ai', subCat: 'ai', badge: '✨', stockStatus: 'READY', name: 'GEMINI ADVANCED + 2TB GOOGLE ONE', subtitle: 'AI Google Pro + Cloud Storage 2TB Resmi', minAgreed: 26000, idealBase: 30000, fhCost: 18000, fhName: 'FH Utama', tag: '#GM-01',
+      tncPoints: ['Wajib backup data Google Drive penting sebelum masa langganan berakhir.'],
+      plans: [
+        { label: 'Invite Family 2TB • 1 Bulan', price: 30000, minAgreed: 26000, fhCost: 18000, tip: 'Pakai akun pribadi kakak sendiri via Family Plan.' },
+        { label: 'Private Akun Baru • 1 Bulan', price: 45000, minAgreed: 40000, fhCost: 29000, tip: 'Akun utuh Gemini Advanced + 2TB Drive.' }
+      ]
+    },
+    { id: 'grammarly', cat: 'ai', subCat: 'ai', badge: '📝', stockStatus: 'READY', name: 'GRAMMARLY PREMIUM + AI', subtitle: 'Cek Grammar, Paraphrase & Plagiarism Checker', minAgreed: 14000, idealBase: 16000, fhCost: 8500, fhName: 'FH Utama', tag: '#GR-01',
+      tncPoints: ['Dilarang menghapus dokumen user lain di dashboard Grammarly.'],
+      plans: [
+        { label: 'Sharing 1 Device • 1 Bulan', price: 16000, minAgreed: 14000, fhCost: 8500, tip: 'Cocok untuk skripsi, jurnal & penulisan profesional.' },
+        { label: 'Private Edu • 1 Bulan', price: 38000, minAgreed: 34000, fhCost: 24000, tip: 'Akun Grammarly Private dokumen 100% terpisah.' }
+      ]
+    },
+    { id: 'turnitin', cat: 'ai', subCat: 'ai', badge: '🎓', stockStatus: 'READY', name: 'TURNITIN NO REPOSITORY', subtitle: 'Cek Similarity Skripsi/Jurnal Aman Anti Tersimpan', minAgreed: 15000, idealBase: 18000, fhCost: 9500, fhName: 'FH Utama', tag: '#TN-01',
+      tncPoints: ['Selalu gunakan kelas No Repository agar dokumen tidak masuk database kampus.'],
+      plans: [
+        { label: 'Student Account • 1 Bulan', price: 18000, minAgreed: 15000, fhCost: 9500, tip: 'Cek similarity mandiri kapan saja 24 jam (No Repository).' },
+        { label: 'Student Account • 3 Bulan', price: 42000, minAgreed: 38000, fhCost: 25000, tip: 'Paket 1 semester bimbingan skripsi tenang.' }
+      ]
+    },
+    { id: 'alight_motion', cat: 'editing', subCat: 'editing', badge: '🎞️', stockStatus: 'READY', name: 'ALIGHT MOTION PRO', subtitle: 'Preset XML, Keyframe Smooth & Tanpa Watermark', minAgreed: 10000, idealBase: 12000, fhCost: 5000, fhName: 'FH Utama', tag: '#AM-01',
+      tncPoints: ['Masuk sesuai panduan iOS/Android & dilarang menyebar detail akses.'],
+      plans: [
+        { label: 'Sharing • 1 Bulan', price: 12000, minAgreed: 10000, fhCost: 5000, tip: 'Support Android & iOS, bebas import preset XML.' },
+        { label: 'Sharing • 1 Tahun', price: 26000, minAgreed: 23000, fhCost: 12000, tip: 'Paket 1 tahun penuh editor JJ/AMV.' }
+      ]
+    },
+    { id: 'lightroom', cat: 'editing', subCat: 'editing', badge: '📸', stockStatus: 'READY', name: 'ADOBE LIGHTROOM PREMIUM', subtitle: 'Preset DNG, Masking AI & Healing Brush', minAgreed: 12000, idealBase: 15000, fhCost: 7500, fhName: 'FH Utama', tag: '#LR-01',
+      tncPoints: ['Wajib matikan Auto-Sync Cloud agar foto pribadi tidak masuk ke galeri bersama.'],
+      plans: [
+        { label: 'Sharing • 1 Bulan', price: 15000, minAgreed: 12000, fhCost: 7500, tip: 'Fitur Masking & Preset penuh, wajib matikan Cloud Sync.' },
+        { label: 'Sharing • 1 Tahun', price: 32000, minAgreed: 28000, fhCost: 15000, tip: 'Paket hemat 1 tahun color grading foto.' }
+      ]
+    },
+    { id: 'goodnotes', cat: 'lainnya', subCat: 'lainnya', badge: '✏️', stockStatus: 'READY', name: 'GOODNOTES 6 FULL VERSION (IPAD)', subtitle: 'Catatan Digital Kuliah & Planner Aesthetic', minAgreed: 22000, idealBase: 25000, fhCost: 12000, fhName: 'FH Utama', tag: '#GN-01',
+      tncPoints: [
+        'KHUSUS iOS/iPadOS: Wajib hanya masuk di App Store (DILARANG KERAS masuk di iCloud Settings!).',
+        'Segera keluar dari Apple ID toko maksimal 15 menit setelah aplikasi selesai terunduh.'
+      ],
+      plans: [
+        { label: 'Full Unlock iPad • 1 Tahun', price: 25000, minAgreed: 22000, fhCost: 12000, tip: 'Buka semua fitur buku catatan tanpa batas.' }
+      ]
+    },
+    { id: 'zoom_pro', cat: 'lainnya', subCat: 'lainnya', badge: '📹', stockStatus: 'READY', name: 'ZOOM PRO MEETING (UNLIMITED)', subtitle: 'Bebas Batas 40 Menit, Co-Host, Breakout & Record', minAgreed: 8500, idealBase: 10000, fhCost: 4000, fhName: 'FH Utama', tag: '#ZM-01',
+      tncPoints: ['Untuk sewa harian wajib konfirmasi jam mulai; untuk bulanan wajib 1 host aktif.'],
+      plans: [
+        { label: '100 Peserta • 1 Hari', price: 10000, minAgreed: 8500, fhCost: 4000, tip: 'Bebas rapat >40 menit seharian penuh 24 jam.' },
+        { label: '100 Peserta • 1 Bulan', price: 28000, minAgreed: 25000, fhCost: 16500, tip: 'Akun Zoom Pro 1 bulan penuh siap pakai kapan saja.' }
+      ]
+    },
+    { id: 'apple_music', cat: 'musik', subCat: 'musik', badge: '🍎', stockStatus: 'READY', name: 'APPLE MUSIC LOSSLESS + ATMOS', subtitle: 'Audio Hi-Res Lossless & Spatial Audio', minAgreed: 14000, idealBase: 16500, fhCost: 9000, fhName: 'FH Utama', tag: '#AP-01',
+      tncPoints: ['Pastikan Apple ID berada di region Indonesia.'],
+      plans: [
+        { label: 'Invite Family • 1 Bulan', price: 16500, minAgreed: 14000, fhCost: 9000, tip: 'Pakai Apple ID kakak sendiri, library musik aman.' },
+        { label: 'Invite Family • 3 Bulan', price: 42000, minAgreed: 38000, fhCost: 25000, tip: 'Paket 3 bulan audio Lossless Dolby Atmos.' }
+      ]
+    },
+    { id: 'secret_menu', isSecret: true, cat: 'populer', subCat: 'lainnya', badge: '👀', stockStatus: 'READY', name: '👀Secret Menu ?', subtitle: 'Isi menu spontan uhuy~ Wajib tanya Archie!', minAgreed: 10000, idealBase: 15000, fhCost: 8000, fhName: 'FH Mimin Archie', tag: '#SC-99',
+      tncPoints: ['Mengikuti kesepakatan khusus dengan Mimin Archie di WhatsApp.'],
+      plans: []
+    }
+  ];
+
+  var DEFAULT_CMS = {
+    version: 1,
+    updatedAt: '',
+    catalog: DEFAULT_CATALOG,
+    storeTos: {
+      title: "🌸 TERMS OF SERVICE (T.O.S) & ATURAN GARANSI ARCHIE'PELAGO 🌸",
+      subtitle: "Aturan Resmi Toko • Berlaku untuk Seluruh Pesanan",
+      points: [
+        { icon: "⏳", title: "1. Aktivasi Wajib 1x12 Jam", desc: "Wajib mengirimkan screenshot full layar bukti berhasil masuk maksimal 1x12 jam setelah pesanan dikirim. Tanpa SS awal, stempel garansi belum dapat diaktifkan." },
+        { icon: "🎟️", title: "2. Arti 3 Stempel Garansi Resmi", desc: "⚪ BELUM DIKLAIM (menunggu SS awal 1x12 jam) • 🟢 SUDAH DIKLAIM (garansi aktif & terlindungi penuh) • 🔴 SUDAH DIGUNAKAN (kuota klaim telah dipakai) • 🚫 HANGUS (melanggar aturan pakai)." },
+        { icon: "📅", title: "3. Hitungan Durasi Langganan", desc: "1 Bulan dihitung 28–30 hari menyesuaikan kalender berjalan. Pantau sisa waktu secara transparan di Jam Flip Twemco portal garansi." },
+        { icon: "🛠️", title: "4. SLA Penanganan Klaim 1x24 Jam", desc: "Laporan kendala diproses maksimal 1x24 jam sejak tiket diterima. Jangan logout saat pengecekan, dan dapatkan kompensasi waktu tunggu (Fair Duration Hold)." },
+        { icon: "📱", title: "5. Aturan Ketat 1 Perangkat & Privasi", desc: "Dilarang masuk lebih dari 1 perangkat (untuk paket 1 device), dilarang mengubah email, sandi, profil, PIN, atau metode pembayaran. Pelanggaran langsung menghanguskan garansi." },
+        { icon: "🛡️", title: "6. Kebijakan Force Majeure & Store Credit", desc: "Jika terjadi gangguan permanen dari pihak provider/developer atau kelangkaan stok, sisa durasi dihitung proporsional (Prorated) dan dapat dikonversi menjadi Voucher Saldo Toko (ARCHIE-CREDIT + Bonus Rp 1.000)." }
+      ]
+    },
+    customerUi: {
+      homeTitle: "WELCOME TO ARCHIE'PELAGO",
+      homeDesc: "Archie siap membantu kamu jajan dengan responsible! in dis ekonoomi huhu~",
+      startBtnText: "SELAMAT JAJAN !",
+      homeQuote: '"Ayo jajan, jangan takut kemahalan~"',
+      sparxieCatalogQuote: '"Dipili dipili dipiliii~ Siapa tau dapet diskon gede, hoho!!"',
+      secretBannerText: "👀 SECRET MENU — Klik kalau punya request khusus! ✨",
+      workStatusOnline: "🟢 Mimin Standby (08.00–23.00 WIB)",
+      workStatusOffline: "🌙 Mode Istirahat Malam (Diproses 08.00 WIB)",
+      isOnlineNow: true,
+      gachaBannerText: "CIEE~ PUTER ATUH BIAR DISKON",
+      tosBtnLabel: "📜 T.O.S & Garansi",
+      waAdminNumber: "",
+      waCheckoutBtnLabel: "📲 Konfirmasi Pembayaran ke WA Mimin Archie",
+      waCheckoutTemplate: "Halo Mimin Archie! 🌸\nAku sudah checkout pesanan di Archie'pelago:\n• Kode Pesanan: {order_code}\n• Inisial: {customer_name}\n• Layanan: {product_name} ({plan_label})\n• Total Bayar: {total_price}\nIni bukti pembayaran / QRIS-nya yaa Mimin! 🐰✨"
+    },
+    garansiUi: {
+      portalTitle: "WELCOME TO ARCHIE'PELAGO",
+      portalSub: "Masukkan Nomor Pesanan & Kata Sandi Tiket untuk mencetak struk resmi, pantau durasi live & tiket garansi 🐰✨",
+      checkBtnText: "BUKA BILL & TIKET GARANSI AKUU~",
+      stampUnclaimedDesc: "⚪ Kirim screenshot bukti masuk awal maksimal 1x12 jam ke WA Mimin agar garansi aktif.",
+      stampClaimedDesc: "🟢 Garansi resmi aktif! Jika ada kendala akun, klaim diproses SLA 1x24 jam.",
+      stampUsedDesc: "🔴 Kuota klaim garansi telah selesai digunakan pada periode langganan ini.",
+      stampVoidDesc: "🚫 Garansi hangus karena pelanggaran aturan pemakaian (T.O.S).",
+      bottomBoxTitle: "💌 Pesan Manis Mimin Archie",
+      bottomFeedbackTitle: "🎀 KOTAK SARAN, KRITIK & TESTIMONI",
+      bottomFeedbackPlaceholder: "Tulis kesan, saran, atau kritik manis kamu untuk Mimin Archie di sini...",
+      bottomFeedbackBtnText: "💌 Kirim ke Mimin Archie",
+      saveBtnText: "📸 Simpan Gambar Struk (Ke Galeri HP)"
+    },
+    adminUi: {
+      fhDirectory: [],
+      waHandoverTemplate:
+        "Halo Kak *{customer_name}*! Pesanan Kakak sudah 100% beres diproses yaa~ Ი𐑼🌸\n\n" +
+        "> 📦 *Nomor Pesanan:* `{order_code}` _(Simpan kode ini baik-baik ya Kak!)_\n" +
+        "> 🔑 *Kata Sandi Tiket (4–5 Huruf):* `{access_pin}`\n" +
+        "> 🛠️ *Layanan:* *{product_name}* ({plan_label})\n" +
+        "> 💰 *Total Lunas:* `{total_price}`\n" +
+        "> 🐰 *Kasir Penanggung Jawab:* _Mimin Archie_\n\n" +
+        "📌 *PANDUAN AKTIVASI GARANSI (WAJIB 3 LANGKAH):*\n" +
+        "*Langkah 1 — Wajib Kirim Screenshot (Batas 1x12 Jam)* 📸\n" +
+        "Begitu berhasil masuk, langsung kirim screenshot full layar ke Mimin yaa.\n" +
+        "*Langkah 2 — Buka & Simpan Tiket Struk Resmi* 🎟️\n" +
+        "Link tiket: {warranty_url} (Kode: `{order_code}` • PIN: `{access_pin}`).\n" +
+        "*Langkah 3 — Patuhi TnC Khusus {product_name}* 🛡️\n" +
+        "_{app_tnc}_\n\n" +
+        "Selamat menikmati layanannya yaa Kak! ⸜(。˃ ᴗ ˂ )⸝♡"
+    }
+  };
+
+  function deepMerge(base, over) {
+    if (!over || typeof over !== 'object') return JSON.parse(JSON.stringify(base));
+    var out = JSON.parse(JSON.stringify(base));
+    Object.keys(over).forEach(function(k) {
+      if (over[k] !== undefined && over[k] !== null) {
+        if (Array.isArray(over[k])) {
+          if (over[k].length > 0 || k === 'fhDirectory') out[k] = JSON.parse(JSON.stringify(over[k]));
+        } else if (typeof over[k] === 'object' && typeof out[k] === 'object' && !Array.isArray(out[k])) {
+          out[k] = deepMerge(out[k], over[k]);
+        } else {
+          out[k] = over[k];
+        }
+      }
+    });
+    return out;
+  }
+
+  window.ARCHIE_DEFAULT_CMS = DEFAULT_CMS;
+  window.ARCHIE_DEFAULT_PORTAL_BASE = DEFAULT_PORTAL_BASE;
+
+  window.ArchieLiveCms = {
+    getCached: function() {
+      try {
+        var raw = localStorage.getItem('archie_live_cms_config');
+        if (raw) return deepMerge(DEFAULT_CMS, JSON.parse(raw));
+      } catch (e) {}
+      return JSON.parse(JSON.stringify(DEFAULT_CMS));
+    },
+
+    fetchLive: async function(sbUrl, sbAnonKey) {
+      var localCfg = this.getCached();
+      if (!sbUrl || !sbAnonKey) return localCfg;
+      try {
+        var resp = await fetch(sbUrl + '/rest/v1/store_cms_config?id=eq.live&select=config_json,version,updated_at', {
+          headers: {
+            'apikey': sbAnonKey,
+            'Authorization': 'Bearer ' + sbAnonKey
+          }
+        });
+        if (resp.ok) {
+          var rows = await resp.json();
+          if (Array.isArray(rows) && rows[0] && rows[0].config_json && Object.keys(rows[0].config_json).length > 0) {
+            var merged = deepMerge(DEFAULT_CMS, rows[0].config_json);
+            merged.version = rows[0].version || merged.version || 1;
+            merged.updatedAt = rows[0].updated_at || merged.updatedAt;
+            try { localStorage.setItem('archie_live_cms_config', JSON.stringify(merged)); } catch (e) {}
+            return merged;
+          }
+        }
+      } catch (e) {}
+      return localCfg;
+    }
+  };
+})();
+
+</script>
+<script>
+// ============================================================================
+// ARCHIE'PELAGO FINAL PRODUCTION — GARANSI.HTML ENGINE
+// - Homescreen Page 1 100% Bersih (Zero Top Nav/Buttons, Zero Demo Presets)
+// - Page 2 Responsive Medium-Smooth Scroll (deltaY * 0.80, lerp 0.18)
+// - Off-Screen 420px Clean Print Stage for Crisp html2canvas PNG + Web Share API
+// - Ticket-Style Bottom Box (Surprise Message + Feedback Form, ZERO Converter Teks)
+// - 100% Dynamic Texts synced live from Supabase store_cms_config (Editor.html)
+// ============================================================================
+(function() {
+  function initGaransiProduction() {
+    if (window.__GARANSI_PROD_INIT__) return;
+    window.__GARANSI_PROD_INIT__ = true;
+
+    // 1. Clean Production CSS (Zero truncated toasts, clean Page 1, responsive scrollable Page 2)
+    var styleEl = document.createElement('style');
+    styleEl.textContent =
+      '#archieToast, #toastMessage, #stampSubDesc, #orderInputHint {' +
+      '  white-space: normal !important; word-wrap: break-word !important; overflow-wrap: anywhere !important;' +
+      '  text-overflow: clip !important; overflow: visible !important; height: auto !important; line-height: 1.45 !important;' +
+      '}' +
+      '#archieToast { min-height: 44px !important; padding: 10px 16px !important; align-items: flex-start !important; }' +
+      '#surpriseModalOverlay { display: none !important; opacity: 0 !important; pointer-events: none !important; }' +
+      '.stamp-void { color: #881337; border-color: #9F1239; background: rgba(255, 228, 234, 0.94); box-shadow: 0 0 0 2px rgba(159, 18, 57, 0.18), 0 6px 14px rgba(136, 19, 55, 0.2); }' +
+      '.twemco-urgent-24h { border-color: #F59E0B !important; background: linear-gradient(180deg, #FFFBEB 0%, #FEF3C7 100%) !important; }' +
+      '#garansiPage0 { overflow: hidden !important; height: 100dvh !important; }' +
+      '#garansiPage1 {' +
+      '  overflow-y: auto !important; overflow-x: hidden !important;' +
+      '  justify-content: flex-start !important; align-items: center !important;' +
+      '  padding-top: 8px !important; padding-bottom: 52px !important;' +
+      '  overscroll-behavior-y: contain !important; -webkit-overflow-scrolling: touch !important;' +
+      '  gap: 14px !important; scroll-behavior: smooth !important;' +
+      '}' +
+      '#garansiPage1::-webkit-scrollbar { width: 5px; }' +
+      '#garansiPage1::-webkit-scrollbar-thumb { background: rgba(216, 49, 98, 0.28); border-radius: 999px; }' +
+      '.ticket-bottom-box {' +
+      '  position: relative; background: #FFFDF9; border: 2px dashed #F4A9C7; border-radius: 24px;' +
+      '  box-shadow: 0 10px 26px rgba(168, 42, 94, 0.1); padding: 16px;' +
+      '}' +
+      '.garansi-modal-backdrop { opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }' +
+      '.garansi-modal-backdrop.open { opacity: 1; pointer-events: auto; }';
+    document.head.appendChild(styleEl);
+
+    var liveCms = window.ArchieLiveCms.getCached();
+
+    // Ensure no star symbol next to store name
+    var eyebrowEl = document.getElementById('stampTopEyebrow');
+    if (eyebrowEl) eyebrowEl.textContent = '🌸 ARCHIE\'PELAGO WARRANTY 🌸';
+
+    // Disable blocking surprise modal overlay -> route text to bottom Ticket-Style Box Card
+    window.triggerSurpriseModal = function(msgText) {
+      var bottomMsgEl = document.getElementById('bottomTicketSurpriseText');
+      if (bottomMsgEl && msgText) bottomMsgEl.textContent = msgText;
+    };
+    var oldOverlay = document.getElementById('surpriseModalOverlay');
+    if (oldOverlay) oldOverlay.remove();
+
+    // 2. Clean Page 1 Top (Hide <header> completely on Page 1 Homescreen)
+    var shell = document.querySelector('main.customer-shell');
+    var topHeader = shell ? shell.querySelector('header') : null;
+    function syncHeaderVisibility(stepIdx) {
+      if (!topHeader) return;
+      if (stepIdx === 0) {
+        topHeader.style.display = 'none';
+      } else {
+        topHeader.style.display = 'flex';
+        var dots = document.getElementById('stepIndicatorDots');
+        var langBtn = document.getElementById('langToggleBtn');
+        if (dots) dots.style.display = 'none';
+        if (langBtn) langBtn.style.display = 'none';
+      }
+    }
+
+    var origGoToStep = goToGaransiStep;
+    goToGaransiStep = function(stepIdx) {
+      origGoToStep(stepIdx);
+      syncHeaderVisibility(stepIdx);
+      if (stepIdx === 1) {
+        var p1 = document.getElementById('garansiPage1');
+        if (p1) {
+          p1.scrollTop = 0;
+          if (typeof p1._resetSmooth === 'function') p1._resetSmooth(0);
+        }
+      }
+    };
+    syncHeaderVisibility(0);
+
+    // 3. Responsive Medium-Smooth Scroll on Page 2 (deltaY * 0.80, lerp 0.18 on desktop; native momentum on mobile)
+    var page2El = document.getElementById('garansiPage1');
+    if (page2El && !page2El._medSmoothBound) {
+      page2El._medSmoothBound = true;
+      var targetY = 0;
+      var currentY = 0;
+      var rafId = null;
+
+      page2El._resetSmooth = function(v) { targetY = v || 0; currentY = v || 0; };
+
+      function tickScroll() {
+        var maxS = Math.max(0, page2El.scrollHeight - page2El.clientHeight);
+        targetY = Math.max(0, Math.min(maxS, targetY));
+        var diff = targetY - currentY;
+        if (Math.abs(diff) > 0.5) {
+          currentY += diff * 0.18;
+          page2El.scrollTop = currentY;
+          rafId = requestAnimationFrame(tickScroll);
+        } else {
+          currentY = targetY;
+          page2El.scrollTop = targetY;
+          rafId = null;
+        }
+      }
+
+      page2El.addEventListener('wheel', function(e) {
+        if (e.target && e.target.tagName === 'TEXTAREA') return;
+        e.preventDefault();
+        var maxS = Math.max(0, page2El.scrollHeight - page2El.clientHeight);
+        if (!rafId) { currentY = page2El.scrollTop; targetY = page2El.scrollTop; }
+        targetY = Math.max(0, Math.min(maxS, targetY + (e.deltaY * 0.80)));
+        if (!rafId) rafId = requestAnimationFrame(tickScroll);
+      }, { passive: false });
+
+      page2El.addEventListener('touchstart', function() {
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        currentY = page2El.scrollTop;
+        targetY = page2El.scrollTop;
+      }, { passive: true });
+    }
+
+    // 4. Add Show/Hide Password Eye Button + Auto-Fill ?code=ARC-XXXX
+    var pinInp = document.getElementById('orderPinInput');
+    if (pinInp && !document.getElementById('togglePinVisibilityBtn')) {
+      pinInp.type = 'password';
+      var eyeBtn = document.createElement('button');
+      eyeBtn.id = 'togglePinVisibilityBtn';
+      eyeBtn.type = 'button';
+      eyeBtn.className = 'shrink-0 px-2.5 py-1 rounded-lg bg-[#FFF0F6] hover:bg-[#FFE0EC] text-[#D83162] border border-[#F6B8D0] text-[10px] font-black transition cursor-pointer';
+      eyeBtn.textContent = '👁️ Lihat';
+      pinInp.parentNode.appendChild(eyeBtn);
+      eyeBtn.addEventListener('click', function() {
+        pinInp.type = (pinInp.type === 'password') ? 'text' : 'password';
+        eyeBtn.textContent = (pinInp.type === 'password') ? '👁️ Lihat' : '🙈 Tutup';
+      });
+    }
+
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var urlCode = params.get('code') || params.get('order');
+      if (urlCode) {
+        var cleanUrlCode = urlCode.trim().toUpperCase().replace(/^(ARC-)+/i, 'ARC-');
+        if (!cleanUrlCode.startsWith('ARC-')) cleanUrlCode = 'ARC-' + cleanUrlCode;
+        var cInp = document.getElementById('orderCodeInput');
+        if (cInp) cInp.value = cleanUrlCode;
+        if (pinInp) setTimeout(function() { pinInp.focus(); }, 150);
+      }
+    } catch (e) {}
+
+    // 5. Add Paid Timestamp, Compensation Badge & Clean Ticket-Style Bottom Box Card (ZERO Converter Teks!)
+    var band2Box = document.querySelector('#gBand2 > div');
+    if (band2Box && !document.getElementById('billPaidAtRowProd')) {
+      var paidRow = document.createElement('div');
+      paidRow.id = 'billPaidAtRowProd';
+      paidRow.className = 'flex items-center justify-between text-[9.5px] pt-0.5 border-t border-dashed border-[#F3C2D6]';
+      paidRow.innerHTML =
+        '<span class="text-[#7A4961] font-bold">Waktu Resmi Lunas:</span>' +
+        '<span id="billPaidAtValProd" class="font-extrabold text-[#4A2036]">-</span>';
+      band2Box.appendChild(paidRow);
+    }
+
+    var timerCardBox = document.getElementById('timerCardBox');
+    if (timerCardBox && !document.getElementById('compHoursBadgeProd')) {
+      var compBadge = document.createElement('div');
+      compBadge.id = 'compHoursBadgeProd';
+      compBadge.className = 'hidden mt-1.5 px-3 py-1 rounded-xl bg-emerald-100 border border-emerald-300 text-emerald-800 text-[9.5px] font-black text-center leading-snug';
+      timerCardBox.querySelector('.twemco-acrylic-bezel').appendChild(compBadge);
+    }
+
+    var saveReceiptBtn = document.getElementById('saveReceiptImageBtn');
+    if (saveReceiptBtn && page2El && !document.getElementById('ticketBottomSurpriseAndFeedbackCard')) {
+      var actionWrap = saveReceiptBtn.parentNode;
+      actionWrap.className = 'w-full max-w-[376px] mx-auto mt-1 flex flex-wrap items-center justify-center gap-2 shrink-0';
+
+      var waBtn = document.createElement('button');
+      waBtn.id = 'garansiWaActionShortcutBtn';
+      waBtn.type = 'button';
+      waBtn.className = 'px-4 py-2 rounded-full bg-gradient-to-r from-[#D83162] to-[#FF5C8A] text-white font-black text-[11px] shadow-sm transition cursor-pointer flex items-center gap-1.5';
+      waBtn.innerHTML = '<span>📲</span><span id="garansiWaShortcutLabel">Kirim Bukti Aktivasi ke WA Mimin</span>';
+      actionWrap.appendChild(waBtn);
+
+      var bottomCard = document.createElement('div');
+      bottomCard.id = 'ticketBottomSurpriseAndFeedbackCard';
+      bottomCard.className = 'w-full max-w-[376px] mx-auto ticket-bottom-box space-y-3 shrink-0 mt-1';
+      bottomCard.innerHTML =
+        '<div class="bg-gradient-to-r from-[#FFF0F6] via-[#FFE4F0] to-[#FFF0F6] border border-[#F5B8CE] rounded-2xl p-3 space-y-1 text-left">' +
+          '<div class="flex items-center justify-between">' +
+            '<span id="bottomBoxTitleLabel" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#D83162] text-white text-[9px] font-black uppercase tracking-wider">💌 Pesan Manis Mimin Archie</span>' +
+            '<span class="text-xs">🐰🌸</span>' +
+          '</div>' +
+          '<p id="bottomTicketSurpriseText" class="text-[11px] font-extrabold text-[#4A2036] leading-relaxed pt-0.5">' +
+            'Makasih banyak udah langganan di Archie\'pelago!! Semoga awet &amp; lancar terus yaa~ 🐰💗✨' +
+          '</p>' +
+        '</div>' +
+        '<div class="border-t-2 border-dashed border-[#F3B6CD]"></div>' +
+        '<div class="space-y-2 text-left">' +
+          '<div class="flex items-center justify-between">' +
+            '<div>' +
+              '<div id="bottomFeedbackHeading" class="text-[10.5px] font-black uppercase tracking-wider text-[#D83162]">🎀 KOTAK SARAN, KRITIK &amp; TESTIMONI</div>' +
+              '<div class="text-[9.5px] font-bold text-[#6D3B53]">Bagikan pengalamanmu langsung ke Mimin Archie!</div>' +
+            '</div>' +
+            '<div id="garansiStarRatingWrap" class="flex items-center gap-0.5 text-sm cursor-pointer select-none">' +
+              '<span data-star="1" class="g-star text-amber-400">★</span>' +
+              '<span data-star="2" class="g-star text-amber-400">★</span>' +
+              '<span data-star="3" class="g-star text-amber-400">★</span>' +
+              '<span data-star="4" class="g-star text-amber-400">★</span>' +
+              '<span data-star="5" class="g-star text-amber-400">★</span>' +
+            '</div>' +
+          '</div>' +
+          '<textarea id="garansiBottomFeedbackInput" rows="3" placeholder="Tulis kesan, saran, atau kritik manis kamu untuk Mimin Archie di sini..." ' +
+            'class="w-full p-2.5 rounded-xl bg-white border-2 border-[#F4A9C7] text-[11px] font-bold text-[#4A2036] focus:outline-none focus:border-[#D83162]"></textarea>' +
+          '<button id="submitBottomTicketFeedbackBtn" type="button" class="w-full py-2.5 rounded-xl btn-berry font-black text-xs cursor-pointer flex items-center justify-center gap-1.5">' +
+            '<span>💌 Kirim ke Mimin Archie</span>' +
+          '</button>' +
+        '</div>';
+      page2El.appendChild(bottomCard);
+
+      var selectedStars = 5;
+      bottomCard.querySelectorAll('.g-star').forEach(function(stEl) {
+        stEl.addEventListener('click', function() {
+          selectedStars = Number(stEl.getAttribute('data-star') || 5);
+          bottomCard.querySelectorAll('.g-star').forEach(function(s) {
+            s.className = 'g-star ' + (Number(s.getAttribute('data-star')) <= selectedStars ? 'text-amber-400' : 'text-pink-200');
+          });
+        });
+      });
+
+      document.getElementById('submitBottomTicketFeedbackBtn').addEventListener('click', async function() {
+        var fbVal = document.getElementById('garansiBottomFeedbackInput').value.trim();
+        if (!fbVal) {
+          showToast('Tulis saran atau testimoni kamu dulu yaa Kak~ 🌸', 'camShock');
+          return;
+        }
+        var ord = (typeof activeOrder !== 'undefined' && activeOrder) ? activeOrder : {};
+        var code = ord.orderCode || (document.getElementById('orderCodeInput') || {}).value || '';
+        var pin = (document.getElementById('orderPinInput') || {}).value || '';
+        try {
+          var res = await callSupabaseRpc('submit_warranty_feedback', {
+            p_order_code: code,
+            p_pin: pin,
+            p_feedback_text: fbVal,
+            p_rating: selectedStars
+          });
+          if (res && res.ok === false) {
+            showToast(res.error || 'Gagal mengirim saran. Coba lagi yaa Kak!', 'camShock');
+            return;
+          }
+        } catch (e) {}
+        launchConfetti(26);
+        showToast('💌 Terima kasih banyak Kak! Saran & testimoni kamu sudah terkirim ke Mimin Archie~ 🐰💗', 'camHappy');
+      });
+
+      waBtn.addEventListener('click', function() {
+        var ord = (typeof activeOrder !== 'undefined' && activeOrder) ? activeOrder : {};
+        var st = (ord.warrantyStatus || 'UNCLAIMED').toUpperCase();
+        var ui = (liveCms && liveCms.customerUi) ? liveCms.customerUi : {};
+        var rawNum = String(ui.waAdminNumber || '').replace(/[^0-9]/g, '');
+        var msg = st === 'UNCLAIMED'
+          ? ('Halo Mimin Archie! Aku mau kirim bukti screenshot aktivasi awal (1x12 jam) untuk pesanan ' + (ord.orderCode || '') + ' (' + (ord.productName || '') + ') yaa~ 🌸')
+          : ('Halo Mimin Archie! Aku mau lapor kendala / klaim garansi untuk pesanan ' + (ord.orderCode || '') + ' (' + (ord.productName || '') + '), ini screenshot lengkapnya yaa~ 🛠️');
+        var base = rawNum ? ('https://wa.me/' + rawNum) : 'https://wa.me/';
+        window.open(base + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+      });
+    }
+
+    // 6. Enhance Stamp Descriptions & Paid/Comp Display
+    var origRenderStamp = renderWarrantyStampAndActions;
+    renderWarrantyStampAndActions = function(order) {
+      origRenderStamp(order);
+      var gui = (liveCms && liveCms.garansiUi) ? liveCms.garansiUi : window.ARCHIE_DEFAULT_CMS.garansiUi;
+      var stampEl = document.getElementById('bigRubberStamp');
+      var titleEl = document.getElementById('stampMainTitle');
+      var subDescEl = document.getElementById('stampSubDesc');
+      var eyebrow = document.getElementById('stampTopEyebrow');
+      var waLbl = document.getElementById('garansiWaShortcutLabel');
+      if (eyebrow) eyebrow.textContent = '🌸 ARCHIE\'PELAGO WARRANTY 🌸';
+      if (subDescEl) subDescEl.classList.remove('truncate');
+
+      var st = (order && (order.warrantyStatus || order.warranty_status) || 'UNCLAIMED').toUpperCase();
+      if (st === 'VOID') {
+        if (stampEl) stampEl.className = 'big-warranty-stamp stamp-void';
+        if (titleEl) titleEl.textContent = 'GARANSI HANGUS';
+        if (subDescEl) subDescEl.textContent = gui.stampVoidDesc;
+        if (waLbl) waLbl.textContent = 'Hubungi WA Mimin Archie';
+      } else if (st === 'CLAIMED') {
+        if (subDescEl) subDescEl.textContent = gui.stampClaimedDesc;
+        if (waLbl) waLbl.textContent = '🛠️ Lapor Kendala / Klaim Garansi';
+      } else if (st === 'USED') {
+        if (subDescEl) subDescEl.textContent = gui.stampUsedDesc;
+        if (waLbl) waLbl.textContent = '💬 Chat WA Mimin Archie';
+      } else {
+        if (subDescEl) subDescEl.textContent = gui.stampUnclaimedDesc;
+        if (waLbl) waLbl.textContent = '📲 Kirim Bukti Aktivasi ke WA Mimin';
+      }
+
+      var paidEl = document.getElementById('billPaidAtValProd');
+      if (paidEl && order) {
+        var pd = order.paid_at || order.created_at;
+        if (pd) {
+          try {
+            paidEl.textContent = new Date(pd).toLocaleString('id-ID', {
+              day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            }) + ' WIB';
+          } catch (e) {}
+        }
+      }
+
+      var compEl = document.getElementById('compHoursBadgeProd');
+      var compH = Number(order && (order.compensation_hours_added || order.compHours) || 0);
+      if (compEl) {
+        if (compH > 0) {
+          compEl.classList.remove('hidden');
+          compEl.textContent = '✨ +' + compH + ' Jam Kompensasi Waktu Klaim Ditambahkan';
+        } else {
+          compEl.classList.add('hidden');
+        }
+      }
+
+      var bottomMsgEl = document.getElementById('bottomTicketSurpriseText');
+      if (bottomMsgEl && order && (order.surpriseMessage || order.surprise_message)) {
+        bottomMsgEl.textContent = order.surpriseMessage || order.surprise_message;
+      }
+    };
+
+    // 7. TOTAL OVERHAUL: Off-Screen 420px Clean Print Stage for Crisp html2canvas PNG + Web Share API
+    function ensureGallerySaveModal() {
+      var m = document.getElementById('saveToGalleryPreviewModal');
+      if (m) return m;
+      m = document.createElement('div');
+      m.id = 'saveToGalleryPreviewModal';
+      m.className = 'garansi-modal-backdrop fixed inset-0 z-[98] flex items-center justify-center bg-[#3A1228]/75 backdrop-blur-sm p-4';
+      m.innerHTML =
+        '<div class="w-full max-w-[390px] bg-white rounded-[28px] border-[3px] border-[#D83162] p-4 space-y-3 shadow-2xl text-center max-h-[92dvh] overflow-y-auto">' +
+          '<div class="flex items-center justify-between border-b border-[#F7CFE0] pb-2 text-left">' +
+            '<div>' +
+              '<div class="text-[9px] font-black uppercase tracking-wider text-[#D83162]">📸 SIMPAN KE GALERI / PHOTOS HP</div>' +
+              '<div class="text-xs font-black text-[#4A2036]">Bukti Resmi Struk &amp; Tiket Garansi</div>' +
+            '</div>' +
+            '<button id="closeGalleryPreviewModalBtn" type="button" class="w-7 h-7 rounded-full bg-[#FFE5EE] text-[#4A2036] font-black text-xs flex items-center justify-center cursor-pointer">✕</button>' +
+          '</div>' +
+          '<div class="bg-[#FFF0F6] border border-[#F5B8CE] rounded-2xl p-2.5 text-[10.5px] font-bold text-[#4A2036] leading-snug text-left">' +
+            '📱 <b>Pengguna HP:</b> Klik <b>"Save Image / Simpan ke Foto"</b> pada menu yang muncul, atau <b>Tekan &amp; Tahan (Long-Press) gambar di bawah ini</b> lalu pilih <b>Simpan ke Foto / Galeri</b>.' +
+          '</div>' +
+          '<div class="bg-[#FFF8FA] p-2 rounded-2xl border border-[#F4A9C7] flex justify-center">' +
+            '<img id="galleryPreviewRenderedImg" src="" alt="Tiket Garansi Archie" class="max-h-[340px] w-auto rounded-xl shadow-md object-contain" />' +
+          '</div>' +
+          '<div class="grid grid-cols-2 gap-2">' +
+            '<button id="nativeShareToGalleryBtn" type="button" class="py-2.5 rounded-xl btn-berry text-[10.5px] font-black cursor-pointer">📱 Simpan ke Galeri HP</button>' +
+            '<a id="directDownloadDesktopLink" href="#" download="Tiket-Archie.png" class="py-2.5 rounded-xl bg-[#4A2036] text-[#FFE066] text-[10.5px] font-black flex items-center justify-center">💻 Unduh File (PC)</a>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(m);
+      document.getElementById('closeGalleryPreviewModalBtn').addEventListener('click', function() { m.classList.remove('open'); });
+      m.addEventListener('click', function(e) { if (e.target === m) m.classList.remove('open'); });
+      return m;
+    }
+
+    function buildOffScreenCleanPrintStage(order, stampTime) {
+      var existing = document.getElementById('archieOffscreenPrintStage');
+      if (existing) existing.remove();
+
+      var code = order.orderCode || 'ARC-0001';
+      var cust = order.customerName || 'Customer';
+      var prod = order.productName || 'Layanan Premium';
+      var plan = order.cleanPlan || '1 Bulan';
+      var total = formatRp(order.finalPrice || 0);
+      var base = formatRp(order.basePrice || order.finalPrice || 0);
+      var disc = Number(order.discountPct || 0);
+      var st = (order.warrantyStatus || 'UNCLAIMED').toUpperCase();
+
+      var dVal = (document.getElementById('tDays') || {}).textContent || '00';
+      var hVal = (document.getElementById('tHours') || {}).textContent || '00';
+      var mVal = (document.getElementById('tMinutes') || {}).textContent || '00';
+      var sVal = (document.getElementById('tSeconds') || {}).textContent || '00';
+      var paidTxt = (document.getElementById('billPaidAtValProd') || {}).textContent || '-';
+      var expTxt = (document.getElementById('billExpiryDateText') || {}).textContent || '-';
+
+      var stampColors = {
+        CLAIMED: { bg: '#ECFDF5', border: '#059669', text: '#047857', title: 'SUDAH DIKLAIM' },
+        USED: { bg: '#FFF1F2', border: '#E11D48', text: '#BE123C', title: 'SUDAH DIGUNAKAN' },
+        VOID: { bg: '#FFE4E6', border: '#9F1239', text: '#881337', title: 'GARANSI HANGUS' },
+        UNCLAIMED: { bg: '#F8FAFC', border: '#64748B', text: '#475569', title: 'BELUM DIKLAIM' }
+      }[st] || { bg: '#F8FAFC', border: '#64748B', text: '#475569', title: 'BELUM DIKLAIM' };
+
+      function flatTwemcoCell(val, lbl) {
+        return (
+          '<div style="flex:1; background:#FFFFFF; border:2px solid #F3B6CD; border-radius:12px; padding:8px 4px; text-align:center; position:relative;">' +
+            '<div style="font-family:\'Space Mono\',monospace; font-size:22px; font-weight:800; color:#4A2036; line-height:1.1; position:relative;">' +
+              val +
+              '<div style="position:absolute; left:4px; right:4px; top:50%; height:1.5px; background:rgba(74,32,54,0.18);"></div>' +
+            '</div>' +
+            '<div style="font-size:8px; font-weight:800; color:#8E536D; margin-top:4px; letter-spacing:0.08em;">' + lbl + '</div>' +
+          '</div>'
+        );
+      }
+
+      var stage = document.createElement('div');
+      stage.id = 'archieOffscreenPrintStage';
+      stage.style.cssText =
+        'position:fixed; left:-9999px; top:0; width:420px; padding:18px; background:#FFF5F8;' +
+        'font-family:\'Plus Jakarta Sans\',sans-serif; color:#4A2036; box-sizing:border-box;';
+
+      stage.innerHTML =
+        '<!-- STRUK THERMAL BERSIH (FLAT 2D, ZERO BLUR, ZERO 3D) -->' +
+        '<div style="background:#FFFFFF; border:2px solid #F4A9C7; border-radius:22px; padding:16px; box-shadow:0 6px 18px rgba(176,72,118,0.08);">' +
+          '<div style="text-align:center; border-bottom:2px dashed #F3C2D6; padding-bottom:12px; margin-bottom:12px;">' +
+            '<div style="display:inline-block; padding:3px 10px; border-radius:999px; background:#FFF0F6; border:1px solid #F5B8CE; color:#9B2358; font-size:9px; font-weight:800; letter-spacing:0.1em;">🌸 OFFICIAL E-RECEIPT 🌸</div>' +
+            '<div style="font-size:15px; font-weight:900; color:#4A2036; margin-top:6px;">🌸 ARCHIE\'PELAGO DIGITAL STORE 🌸</div>' +
+            '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-size:10px; font-weight:700; color:#6D3B53;">' +
+              '<span>Kasir: <strong style="color:#4A2036;">Mimin Archie 🐰</strong></span>' +
+              '<span style="background:#4A2036; color:#FFE066; padding:2px 8px; border-radius:6px; font-family:\'Space Mono\',monospace; font-weight:800;">' + code + '</span>' +
+            '</div>' +
+          '</div>' +
+
+          '<div style="background:#FFF6FA; border:1.5px solid #F5C2D7; border-radius:14px; padding:10px 12px; font-size:11px; margin-bottom:12px;">' +
+            '<div style="display:flex; justify-content:space-between; padding-bottom:5px; border-bottom:1px dashed #F3C2D6;">' +
+              '<span style="color:#6D3B53; font-weight:700;">Pemegang Tiket:</span>' +
+              '<strong style="color:#4A2036;">' + cust + '</strong>' +
+            '</div>' +
+            '<div style="display:flex; justify-content:space-between; padding-top:5px;">' +
+              '<span style="color:#6D3B53; font-weight:700;">Layanan:</span>' +
+              '<strong style="color:#4A2036; text-align:right;">' + prod + '</strong>' +
+            '</div>' +
+            '<div style="display:flex; justify-content:space-between; padding-top:4px;">' +
+              '<span style="color:#6D3B53; font-weight:700;">Paket &amp; Durasi:</span>' +
+              '<strong style="color:#D83162; text-align:right;">' + plan + '</strong>' +
+            '</div>' +
+            '<div style="display:flex; justify-content:space-between; padding-top:4px;">' +
+              '<span style="color:#6D3B53; font-weight:700;">Waktu Lunas:</span>' +
+              '<strong style="color:#4A2036;">' + paidTxt + '</strong>' +
+            '</div>' +
+          '</div>' +
+
+          '<div style="background:#FFFFFF; border:1.5px solid #F5B8CE; border-radius:14px; padding:10px 12px; font-size:11px; margin-bottom:12px;">' +
+            '<div style="display:flex; justify-content:space-between; margin-bottom:4px;">' +
+              '<span style="color:#6D3B53; font-weight:700;">Harga Katalog / Diskon:</span>' +
+              '<strong style="color:#4A2036;">' + base + (disc > 0 ? (' (-' + disc + '%)') : '') + '</strong>' +
+            '</div>' +
+            '<div style="display:flex; justify-content:space-between; align-items:center; padding-top:6px; border-top:1px dashed #F3B6CD;">' +
+              '<strong style="color:#4A2036;">TOTAL LUNAS:</strong>' +
+              '<span style="font-family:\'Space Mono\',monospace; font-size:16px; font-weight:900; color:#D83162;">' + total + ' ✅</span>' +
+            '</div>' +
+          '</div>' +
+
+          '<!-- FLAT 2D TWEMCO CLOCK CARD -->' +
+          '<div style="background:#FFF0F6; border:2px solid #F4A9C7; border-radius:16px; padding:10px;">' +
+            '<div style="display:flex; justify-content:space-between; align-items:center; font-size:9px; font-weight:900; color:#7A3E58; margin-bottom:8px;">' +
+              '<span>⏳ SISA DURASI LANGGANAN</span>' +
+              '<span>' + expTxt + '</span>' +
+            '</div>' +
+            '<div style="display:flex; gap:8px;">' +
+              flatTwemcoCell(dVal, 'HARI') +
+              flatTwemcoCell(hVal, 'JAM') +
+              flatTwemcoCell(mVal, 'MENIT') +
+              flatTwemcoCell(sVal, 'DETIK') +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- TIKET GARANSI BERLUBANG (CLEAN FLAT 2D) -->' +
+        '<div style="margin-top:14px; background:#FFFDF7; border:2px solid #F4A9C7; border-radius:20px; display:flex; overflow:hidden; position:relative;">' +
+          '<div style="width:30%; background:#FFEBF2; padding:14px 10px; border-right:2px dashed #F4A9C7; text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center;">' +
+            '<div style="font-size:8px; font-weight:900; color:#9B2358; letter-spacing:0.1em;">ARCHIE TICKET</div>' +
+            '<div style="font-size:20px; margin:6px 0;">🐰</div>' +
+            '<div style="font-family:\'Space Mono\',monospace; font-size:10px; font-weight:900; color:#4A2036;">' + code + '</div>' +
+            '<div style="font-size:8px; font-weight:700; color:#6D3B53; margin-top:2px;">GARANSI RESMI</div>' +
+          '</div>' +
+          '<div style="width:70%; padding:14px; text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center;">' +
+            '<div style="font-size:9px; font-weight:900; color:#D83162; letter-spacing:0.06em;">🎟️ TIKET KLAIM GARANSI CUSTOMER</div>' +
+            '<div style="margin:10px 0; padding:8px 14px; border:3px double ' + stampColors.border + '; background:' + stampColors.bg + '; color:' + stampColors.text + '; border-radius:12px; font-weight:900; font-size:13px; letter-spacing:0.06em;">' +
+              '🌸 ' + stampColors.title + ' 🌸' +
+            '</div>' +
+            '<div style="font-size:9px; font-weight:700; color:#6D3B53;">' + prod + ' • ' + plan + '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<!-- WATERMARK RESMI POJOK KANAN BAWAH -->' +
+        '<div style="margin-top:12px; text-align:right;">' +
+          '<span style="display:inline-block; background:#D83162; color:#FFFFFF; padding:5px 12px; border-radius:999px; font-size:10px; font-weight:800;">' +
+            'Disimpan Customer: ' + stampTime +
+          '</span>' +
+        '</div>';
+
+      document.body.appendChild(stage);
+      return stage;
+    }
+
+    var saveBtn = document.getElementById('saveReceiptImageBtn');
+    if (saveBtn) {
+      var cleanSaveBtn = saveBtn.cloneNode(true);
+      saveBtn.parentNode.replaceChild(cleanSaveBtn, saveBtn);
+      cleanSaveBtn.addEventListener('click', async function() {
+        var ord = (typeof activeOrder !== 'undefined' && activeOrder) ? activeOrder : null;
+        if (!ord) return;
+        var code = ord.orderCode || 'ARC-0001';
+        var pin = (document.getElementById('orderPinInput') || {}).value || '';
+        var stampTime = new Date().toLocaleString('id-ID', {
+          day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
+        }) + ' WIB';
+
+        showToast('📸 Mencetak gambar struk presisi untuk Galeri HP Kakak...', 'camHappy');
+
+        try {
+          callSupabaseRpc('record_receipt_saved', { p_order_code: code, p_pin: pin });
+        } catch (e) {}
+
+        var stage = buildOffScreenCleanPrintStage(ord, stampTime);
+        var canvas = null;
+        try {
+          if (document.fonts && document.fonts.ready) await document.fonts.ready;
+          if (window.html2canvas) {
+            canvas = await window.html2canvas(stage, {
+              scale: 2,
+              useCORS: true,
+              backgroundColor: '#FFF5F8',
+              logging: false
+            });
+          }
+        } catch (e) {}
+        stage.remove();
+
+        if (!canvas) {
+          showToast('Maaf Kak, browser belum mendukung render gambar otomatis. Silakan screenshot layar yaa!', 'camShock');
+          return;
+        }
+
+        var dataUrl = canvas.toDataURL('image/png');
+        var blob = await new Promise(function(resolve) { canvas.toBlob(resolve, 'image/png'); });
+        var fileName = 'Tiket-Archie-' + code + '.png';
+        var imageFile = null;
+        try { imageFile = new File([blob], fileName, { type: 'image/png' }); } catch (e) {}
+
+        var modal = ensureGallerySaveModal();
+        var previewImg = document.getElementById('galleryPreviewRenderedImg');
+        var dlLink = document.getElementById('directDownloadDesktopLink');
+        var shareBtn = document.getElementById('nativeShareToGalleryBtn');
+        if (previewImg) previewImg.src = dataUrl;
+        if (dlLink) { dlLink.href = dataUrl; dlLink.download = fileName; }
+        if (shareBtn) {
+          shareBtn.onclick = async function() {
+            if (imageFile && navigator.canShare && navigator.canShare({ files: [imageFile] })) {
+              try {
+                await navigator.share({ files: [imageFile], title: 'Tiket Garansi ' + code });
+                showToast('📸 Berhasil membuka menu Simpan ke Foto / Galeri HP! 💗', 'camHappy');
+                return;
+              } catch (err) {}
+            }
+            dlLink.click();
+          };
+        }
+        modal.classList.add('open');
+
+        if (imageFile && navigator.canShare && navigator.canShare({ files: [imageFile] })) {
+          try {
+            await navigator.share({ files: [imageFile], title: 'Tiket Garansi ' + code });
+            showToast('📸 Gambar struk siap disimpan ke Galeri Foto HP Kakak! 💗', 'camHappy');
+          } catch (e) {}
+        }
+      });
+    }
+
+    // 8. Apply 100% Dynamic Texts from Live CMS (Editor.html)
+    function applyCmsConfigToGaransi(cfg) {
+      if (!cfg) return;
+      liveCms = cfg;
+      var gui = cfg.garansiUi || {};
+      var setText = function(id, val) {
+        var el = document.getElementById(id);
+        if (el && val) el.textContent = val;
+      };
+      setText('txtPortalTitle', gui.portalTitle);
+      setText('txtPortalSub', gui.portalSub);
+      setText('txtCheckOrderBtn', gui.checkBtnText);
+      setText('bottomBoxTitleLabel', gui.bottomBoxTitle);
+      setText('bottomFeedbackHeading', gui.bottomFeedbackTitle);
+      setText('submitBottomTicketFeedbackBtn', gui.bottomFeedbackBtnText);
+      setText('saveReceiptImageBtn', gui.saveBtnText);
+      var fbTa = document.getElementById('garansiBottomFeedbackInput');
+      if (fbTa && gui.bottomFeedbackPlaceholder) fbTa.placeholder = gui.bottomFeedbackPlaceholder;
+      if (typeof activeOrder !== 'undefined' && activeOrder) renderWarrantyStampAndActions(activeOrder);
+    }
+
+    applyCmsConfigToGaransi(liveCms);
+    if (typeof SUPABASE_URL !== 'undefined' && typeof SUPABASE_ANON_KEY !== 'undefined') {
+      window.ArchieLiveCms.fetchLive(SUPABASE_URL, SUPABASE_ANON_KEY).then(applyCmsConfigToGaransi);
+    }
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'archie_live_cms_config') {
+        applyCmsConfigToGaransi(window.ArchieLiveCms.getCached());
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(initGaransiProduction, 80); });
+  } else {
+    setTimeout(initGaransiProduction, 80);
+  }
+})();
+
+</script>
 </body>
 </html>
