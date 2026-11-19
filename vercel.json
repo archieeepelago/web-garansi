@@ -24,6 +24,6 @@
     { "source": "/customer", "destination": "/Customer.html" },
     { "source": "/garansi", "destination": "/Garansi.html" },
     { "source": "/admin", "destination": "/Admin.html" },
-    { "source": "/editor", "destination": "/Editor.html" }
+    { "source": "/editor", "destination": "/index.html" }
   ]
 }

@@ -154,9 +154,9 @@
     }
     .ticket-card {
       position: relative;
-      background: #FFFDF7;
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF6 100%);
       border-radius: 18px;
-      border: 2px solid #F3B6CD;
+      border: 2px solid #F2DCE2;
       overflow: hidden;
     }
     /* Four Corner Scoop Cutouts */
@@ -267,11 +267,11 @@
     /* ===================================================== */
     .bill-ticket-card {
       position: relative;
-      background: #FFFDF7;
-      border: 2px solid #F3B6CD;
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF6 100%);
+      border: 2px solid #F2DCE2;
       border-top: 0;
       border-radius: 8px 8px 20px 20px;
-      box-shadow: 0 12px 26px rgba(138, 38, 82, 0.14);
+      box-shadow: 0 12px 26px rgba(138, 38, 82, 0.13);
       overflow: hidden;
     }
     /* Bottom Corner Ticket Scoops on Bill */
@@ -974,7 +974,7 @@
           </div>
 
           <!-- Right Main Ticket Body (73% Width): Symmetrical Top & Bottom Padding (py-3.5)  -->
-          <div id="gUnit15" class="print-unit w-[73%] py-3.5 px-3.5 pl-5 flex flex-col justify-between relative bg-[#FFFDF7]">
+          <div id="gUnit15" class="print-unit w-[73%] py-3.5 px-3.5 pl-5 flex flex-col justify-between relative bg-[#FFFDF8]">
             <div class="flex items-center justify-between gap-1 leading-tight">
               <div class="min-w-0">
                 <div class="text-[8.5px] font-black uppercase tracking-wider text-[#D83162]">
@@ -1277,22 +1277,19 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
       const cleanName = rawInit.replace(/\s*👑\s*Donatur/gi, '').trim() || 'Kak Customer';
 
       let seqNum = 0;
-      if (embeddedCode) {
-        const d = parseInt(embeddedCode.replace(/[^0-9]/g, ''), 10);
-        if (d > 0 && d < 1000) seqNum = d;
+      let orderCode = '';
+      const mCode = raw.order_code ? String(raw.order_code).trim().match(/^ARC-0*(\d{1,6})$/i) : null;
+      const mEmb = embeddedCode ? String(embeddedCode).trim().match(/^ARC-0*(\d{1,6})$/i) : null;
+      if (mCode && mCode[1]) {
+        orderCode = `ARC-${String(parseInt(mCode[1], 10)).padStart(4, '0')}`;
+      } else if (mEmb && mEmb[1]) {
+        orderCode = `ARC-${String(parseInt(mEmb[1], 10)).padStart(4, '0')}`;
+      } else if (raw.id !== undefined && raw.id !== null && /^\d{1,6}$/.test(String(raw.id).trim())) {
+        orderCode = `ARC-${String(parseInt(String(raw.id).trim(), 10)).padStart(4, '0')}`;
+      } else {
+        orderCode = `ARC-${String(Math.max(1, seqIndexFallback || 1)).padStart(4, '0')}`;
       }
-      if (!seqNum && raw.order_code) {
-        const d = parseInt(String(raw.order_code).replace(/[^0-9]/g, ''), 10);
-        if (d > 0 && d < 1000) seqNum = d;
-      }
-      if (!seqNum && raw.id !== undefined && raw.id !== null) {
-        const d = parseInt(String(raw.id).replace(/[^0-9]/g, ''), 10);
-        if (d > 0 && d < 1000) seqNum = d;
-      }
-      if (!seqNum) seqNum = Math.max(1, seqIndexFallback || 1);
-
-      const codeDigits = String(seqNum).padStart(4, '0');
-      const orderCode = `ARC-${codeDigits}`;
+      const codeDigits = orderCode.replace(/^ARC-/i, '');
 
       let donationAmt = Number(raw.donation_amount) || 0;
       if (!donationAmt) {
@@ -2812,23 +2809,162 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
       timerCardBox.querySelector('.twemco-acrylic-bezel').appendChild(compBadge);
     }
 
+    // 5. Spacious Page 2 (Anti-Dempet) + Remove Activation + Combined Store & App T.O.S + Fixed Feedback + Crisp Ivory PNG with Full HH:mm:ss Timestamps
+    function formatFullWibDateTime(dateInput) {
+      var d = dateInput ? new Date(dateInput) : new Date();
+      if (isNaN(d.getTime())) d = new Date();
+      var dd = String(d.getDate()).padStart(2, '0');
+      var mm = String(d.getMonth() + 1).padStart(2, '0');
+      var yyyy = d.getFullYear();
+      var hh = String(d.getHours()).padStart(2, '0');
+      var mi = String(d.getMinutes()).padStart(2, '0');
+      var ss = String(d.getSeconds()).padStart(2, '0');
+      return dd + '/' + mm + '/' + yyyy + ' ' + hh + ':' + mi + ':' + ss + ' WIB';
+    }
+
+    function getOrPersistFirstPrintedIso(order) {
+      if (!order) return new Date().toISOString();
+      var key = 'archie_first_print_' + String(order.orderCode || order.order_code || order.id || 'default');
+      if (order.receipt_saved_at) {
+        try { localStorage.setItem(key, order.receipt_saved_at); } catch (_) {}
+        return order.receipt_saved_at;
+      }
+      var stored = null;
+      try { stored = localStorage.getItem(key); } catch (_) {}
+      if (stored) return stored;
+      var fallback = order.paid_at || order.created_at || new Date().toISOString();
+      try { localStorage.setItem(key, fallback); } catch (_) {}
+      return fallback;
+    }
+
+    var p2Style = document.createElement('style');
+    p2Style.id = 'garansiSpaciousCss';
+    p2Style.textContent =
+      '#garansiPage2 { padding: 26px 16px 52px 16px !important; gap: 20px !important; }' +
+      '#garansiPage2 > * { margin-bottom: 8px; }' +
+      '.receipt-paper, #receiptCaptureArea { background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF6 100%) !important; border-color: #F2DCE2 !important; padding: 20px 18px !important; }' +
+      '@keyframes garansiTosSpringIn { 0% { opacity: 0; transform: scale(0.74) translateY(26px); } 55% { opacity: 1; transform: scale(1.045) translateY(-4px); } 78% { transform: scale(0.985) translateY(1px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }' +
+      '#garansiTosOverlay { position: fixed; inset: 0; z-index: 9999; background: rgba(74, 32, 54, 0.58); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.22s ease, visibility 0.22s ease; }' +
+      '#garansiTosOverlay.open { opacity: 1; visibility: visible; pointer-events: auto; }' +
+      '#garansiTosOverlay > div { scrollbar-width: none; -ms-overflow-style: none; background: linear-gradient(180deg, #FFF3F8 0%, #FFEAF2 100%) !important; opacity: 0; transform: scale(0.78) translateY(22px); }' +
+      '#garansiTosOverlay > div::-webkit-scrollbar { display: none !important; width: 0 !important; }' +
+      '#garansiTosOverlay.open > div { animation: garansiTosSpringIn 0.46s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }';
+    document.head.appendChild(p2Style);
+
+    // Combined Store + Purchased App T.O.S Modal
+    if (!document.getElementById('garansiTosOverlay')) {
+      var gTosOv = document.createElement('div');
+      gTosOv.id = 'garansiTosOverlay';
+      gTosOv.innerHTML =
+        '<div class="w-full max-w-md max-h-[85vh] overflow-y-auto bg-white border-2 border-[#F5B8CE] rounded-[28px] p-5 shadow-2xl space-y-3.5 text-left">' +
+          '<div class="flex items-start justify-between gap-2 border-b-2 border-dashed border-[#F4A9C7] pb-2.5">' +
+            '<div>' +
+              '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FFE4EE] text-[#D83162] text-[9px] font-black uppercase tracking-wider">🎟️ SAKURA OFFICIAL POLICY</span>' +
+              '<h3 id="gTosModalTitle" class="text-xs sm:text-sm font-black text-[#4A2036] mt-1">TERMS OF SERVICE TOKO &amp; APLIKASI</h3>' +
+            '</div>' +
+            '<button id="closeGaransiTosBtn" type="button" class="w-8 h-8 rounded-full bg-[#FFE5EE] hover:bg-[#FFD0E2] text-[#4A2036] font-black text-xs flex items-center justify-center shrink-0 cursor-pointer">✕</button>' +
+          '</div>' +
+          '<div id="gTosAppBox" class="bg-gradient-to-br from-[#FFF0F6] to-[#FFE4F0] border-2 border-[#D83162] rounded-2xl p-3 space-y-1.5">' +
+            '<div class="text-[9.5px] font-black text-[#D83162] uppercase tracking-wider">🛡️ T.O.S KHUSUS APLIKASI YANG DIBELI</div>' +
+            '<div id="gTosAppName" class="text-xs font-black text-[#4A2036]">Aplikasi Premium</div>' +
+            '<ul id="gTosAppPoints" class="list-disc pl-4 space-y-1 text-[10.5px] font-bold text-[#4A2036] leading-relaxed"></ul>' +
+          '</div>' +
+          '<div class="space-y-1.5">' +
+            '<div class="text-[10px] font-black uppercase tracking-wider text-[#8E2452]">📜 T.O.S UMUM TOKO ARCHIE\'PELAGO</div>' +
+            '<div id="gTosStorePoints" class="space-y-1.5"></div>' +
+          '</div>' +
+          '<button id="okGaransiTosBtn" type="button" class="w-full py-2.5 rounded-full btn-berry text-xs font-black cursor-pointer">✅ Paham &amp; Tutup 🌸</button>' +
+        '</div>';
+      document.body.appendChild(gTosOv);
+
+      var closeGTos = function() { gTosOv.classList.remove('open'); };
+      document.getElementById('closeGaransiTosBtn').addEventListener('click', closeGTos);
+      document.getElementById('okGaransiTosBtn').addEventListener('click', closeGTos);
+      gTosOv.addEventListener('click', function(e) { if (e.target === gTosOv) closeGTos(); });
+    }
+
+    function openCombinedGaransiTos() {
+      var cms = liveCms || window.ARCHIE_DEFAULT_CMS || {};
+      var storeTos = cms.storeTos || window.ARCHIE_DEFAULT_CMS.storeTos;
+      var catalog = Array.isArray(cms.catalog) ? cms.catalog : window.ARCHIE_DEFAULT_CMS.catalog;
+      var ord = (typeof activeOrder !== 'undefined' && activeOrder) ? activeOrder : {};
+      var prodName = String(ord.productName || ord.product_name || '').toLowerCase();
+
+      var matchedApp = catalog.find(function(p) {
+        var pn = String(p.name || '').toLowerCase();
+        return pn && prodName && (prodName.includes(pn.split(' ')[0]) || pn.includes(prodName.split(' ')[0]));
+      });
+
+      var appNameEl = document.getElementById('gTosAppName');
+      var appPtsEl = document.getElementById('gTosAppPoints');
+      var storePtsEl = document.getElementById('gTosStorePoints');
+      var titleEl = document.getElementById('gTosModalTitle');
+
+      if (titleEl) titleEl.textContent = (storeTos && storeTos.title) ? storeTos.title : 'TERMS OF SERVICE TOKO & APLIKASI';
+      if (appNameEl) appNameEl.textContent = matchedApp ? ((matchedApp.badge || '✨') + ' ' + matchedApp.name) : ('✨ ' + (ord.productName || 'Aplikasi Premium'));
+      if (appPtsEl) {
+        appPtsEl.innerHTML = '';
+        var pts = (matchedApp && Array.isArray(matchedApp.tncPoints) && matchedApp.tncPoints.length > 0)
+          ? matchedApp.tncPoints
+          : ['Wajib gunakan di 1 perangkat sesuai profil & dilarang mengubah pengaturan akun/PIN.'];
+        pts.forEach(function(line) {
+          var li = document.createElement('li');
+          li.textContent = line;
+          appPtsEl.appendChild(li);
+        });
+      }
+      if (storePtsEl) {
+        storePtsEl.innerHTML = '';
+        (storeTos.points || []).forEach(function(pt) {
+          var card = document.createElement('div');
+          card.className = 'p-2.5 rounded-2xl bg-[#FFF8FA] border border-[#F5C2D7] space-y-0.5';
+          var t = document.createElement('div');
+          t.className = 'text-[10.5px] font-black text-[#4A2036]';
+          t.textContent = (typeof pt === 'object' ? ((pt.icon || '🌸') + ' ' + (pt.title || '')) : '🌸 Aturan Toko');
+          var d = document.createElement('div');
+          d.className = 'text-[10px] font-bold text-[#6D3B53] leading-relaxed';
+          d.textContent = (typeof pt === 'object' ? (pt.desc || '') : String(pt));
+          card.appendChild(t);
+          card.appendChild(d);
+          storePtsEl.appendChild(card);
+        });
+      }
+      var ov = document.getElementById('garansiTosOverlay');
+      if (ov) {
+        var box = ov.firstElementChild;
+        if (box) { box.style.animation = 'none'; void box.offsetWidth; box.style.animation = ''; }
+        ov.classList.add('open');
+      }
+    }
+
     var saveReceiptBtn = document.getElementById('saveReceiptImageBtn');
     if (saveReceiptBtn && page2El && !document.getElementById('ticketBottomSurpriseAndFeedbackCard')) {
       var actionWrap = saveReceiptBtn.parentNode;
-      actionWrap.className = 'w-full max-w-[376px] mx-auto mt-1 flex flex-wrap items-center justify-center gap-2 shrink-0';
+      actionWrap.className = 'w-full max-w-[390px] mx-auto mt-3 flex flex-wrap items-center justify-center gap-2.5 shrink-0';
 
-      var waBtn = document.createElement('button');
-      waBtn.id = 'garansiWaActionShortcutBtn';
-      waBtn.type = 'button';
-      waBtn.className = 'px-4 py-2 rounded-full bg-gradient-to-r from-[#D83162] to-[#FF5C8A] text-white font-black text-[11px] shadow-sm transition cursor-pointer flex items-center gap-1.5';
-      waBtn.innerHTML = '<span>📲</span><span id="garansiWaShortcutLabel">Kirim Bukti Aktivasi ke WA Mimin</span>';
-      actionWrap.appendChild(waBtn);
+      // Combined T.O.S button (NO activation button!)
+      var tosBtn = document.createElement('button');
+      tosBtn.id = 'garansiCombinedTosBtn';
+      tosBtn.type = 'button';
+      tosBtn.className = 'px-4 py-2 rounded-full bg-white hover:bg-[#FFE0EC] border-2 border-[#D83162] text-[#D83162] font-black text-[11px] shadow-sm transition cursor-pointer flex items-center gap-1.5';
+      tosBtn.innerHTML = '<span>📜</span><span id="garansiTosBtnLabel">T.O.S Toko &amp; Aplikasi</span>';
+      tosBtn.addEventListener('click', openCombinedGaransiTos);
+      actionWrap.appendChild(tosBtn);
+
+      var receiptCard = document.getElementById('receiptCaptureArea') || document.querySelector('.receipt-paper');
+      if (receiptCard && !document.getElementById('billFirstPrintedRow')) {
+        var fpRow = document.createElement('div');
+        fpRow.id = 'billFirstPrintedRow';
+        fpRow.className = 'mt-3 pt-2.5 border-t border-dashed border-[#DFD2BE] flex items-center justify-between text-[10px] font-bold text-[#6D3B53]';
+        fpRow.innerHTML = '<span>🗓️ Pertama Dicetak:</span><span id="billFirstPrintedVal" class="font-black text-[#4A2036] tabular-nums">-</span>';
+        receiptCard.appendChild(fpRow);
+      }
 
       var bottomCard = document.createElement('div');
       bottomCard.id = 'ticketBottomSurpriseAndFeedbackCard';
-      bottomCard.className = 'w-full max-w-[376px] mx-auto ticket-bottom-box space-y-3 shrink-0 mt-1';
+      bottomCard.className = 'w-full max-w-[390px] mx-auto ticket-bottom-box space-y-3.5 shrink-0 mt-4 p-4';
       bottomCard.innerHTML =
-        '<div class="bg-gradient-to-r from-[#FFF0F6] via-[#FFE4F0] to-[#FFF0F6] border border-[#F5B8CE] rounded-2xl p-3 space-y-1 text-left">' +
+        '<div class="bg-gradient-to-r from-[#FFF0F6] via-[#FFE4F0] to-[#FFF0F6] border border-[#F5B8CE] rounded-2xl p-3.5 space-y-1 text-left">' +
           '<div class="flex items-center justify-between">' +
             '<span id="bottomBoxTitleLabel" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#D83162] text-white text-[9px] font-black uppercase tracking-wider">💌 Pesan Manis Mimin Archie</span>' +
             '<span class="text-xs">🐰🌸</span>' +
@@ -2838,7 +2974,7 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
           '</p>' +
         '</div>' +
         '<div class="border-t-2 border-dashed border-[#F3B6CD]"></div>' +
-        '<div class="space-y-2 text-left">' +
+        '<div class="space-y-2.5 text-left">' +
           '<div class="flex items-center justify-between">' +
             '<div>' +
               '<div id="bottomFeedbackHeading" class="text-[10.5px] font-black uppercase tracking-wider text-[#D83162]">🎀 KOTAK SARAN, KRITIK &amp; TESTIMONI</div>' +
@@ -2871,44 +3007,55 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
       });
 
       document.getElementById('submitBottomTicketFeedbackBtn').addEventListener('click', async function() {
-        var fbVal = document.getElementById('garansiBottomFeedbackInput').value.trim();
+        var fbInput = document.getElementById('garansiBottomFeedbackInput');
+        var fbVal = (fbInput ? fbInput.value : '').trim();
         if (!fbVal) {
           showToast('Tulis saran atau testimoni kamu dulu yaa Kak~ 🌸', 'camShock');
           return;
         }
+        var btn = this;
+        btn.disabled = true;
         var ord = (typeof activeOrder !== 'undefined' && activeOrder) ? activeOrder : {};
-        var code = ord.orderCode || (document.getElementById('orderCodeInput') || {}).value || '';
-        var pin = (document.getElementById('orderPinInput') || {}).value || '';
+        var code = ord.orderCode || ord.order_code || (document.getElementById('orderCodeInput') || {}).value || '';
+        var pin = ord.accessPin || ord.access_pin || (document.getElementById('orderPinInput') || {}).value || '';
+        var nowIso = new Date().toISOString();
+        var taggedFb = '[GARANSI_TESTI|' + nowIso + '] ' + fbVal;
+        var savedOk = false;
+
         try {
-          var res = await callSupabaseRpc('submit_warranty_feedback', {
-            p_order_code: code,
-            p_pin: pin,
-            p_feedback_text: fbVal,
-            p_rating: selectedStars
-          });
-          if (res && res.ok === false) {
-            showToast(res.error || 'Gagal mengirim saran. Coba lagi yaa Kak!', 'camShock');
-            return;
+          if (typeof callSupabaseRpc === 'function' && code && pin) {
+            var res = await callSupabaseRpc('submit_warranty_feedback', {
+              p_order_code: String(code).trim(),
+              p_pin: String(pin).trim(),
+              p_feedback_text: taggedFb,
+              p_rating: selectedStars
+            });
+            if (res && res.ok === true) savedOk = true;
           }
         } catch (e) {}
-        launchConfetti(26);
-        showToast('💌 Terima kasih banyak Kak! Saran & testimoni kamu sudah terkirim ke Mimin Archie~ 🐰💗', 'camHappy');
-      });
 
-      waBtn.addEventListener('click', function() {
-        var ord = (typeof activeOrder !== 'undefined' && activeOrder) ? activeOrder : {};
-        var st = (ord.warrantyStatus || 'UNCLAIMED').toUpperCase();
-        var ui = (liveCms && liveCms.customerUi) ? liveCms.customerUi : {};
-        var rawNum = String(ui.waAdminNumber || '').replace(/[^0-9]/g, '');
-        var msg = st === 'UNCLAIMED'
-          ? ('Halo Mimin Archie! Aku mau kirim bukti screenshot aktivasi awal (1x12 jam) untuk pesanan ' + (ord.orderCode || '') + ' (' + (ord.productName || '') + ') yaa~ 🌸')
-          : ('Halo Mimin Archie! Aku mau lapor kendala / klaim garansi untuk pesanan ' + (ord.orderCode || '') + ' (' + (ord.productName || '') + '), ini screenshot lengkapnya yaa~ 🛠️');
-        var base = rawNum ? ('https://wa.me/' + rawNum) : 'https://wa.me/';
-        window.open(base + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+        if (!savedOk && ord && ord.id) {
+          try {
+            var client = (typeof getSupabaseClient === 'function') ? getSupabaseClient() : null;
+            if (client) {
+              var upd = await client.from('orders').update({ feedback: taggedFb, rating: selectedStars }).eq('id', ord.id);
+              if (!upd.error) savedOk = true;
+            }
+          } catch (e2) {}
+        }
+
+        btn.disabled = false;
+        if (!savedOk) {
+          showToast('Gagal menyimpan testimoni sementara, coba klik kirim lagi yaa Kak! 🥺', 'camShock');
+          return;
+        }
+        if (fbInput) fbInput.value = '';
+        launchConfetti(26);
+        showToast('💌 Terima kasih banyak Kak! Testimoni kamu sudah masuk ke Wall of Love Mimin Archie~ 🐰💗', 'camHappy');
       });
     }
 
-    // 6. Enhance Stamp Descriptions & Paid/Comp Display
+    // 6. Stamp Descriptions (NO activation section) + Full HH:mm:ss First-Printed Timestamp
     var origRenderStamp = renderWarrantyStampAndActions;
     renderWarrantyStampAndActions = function(order) {
       origRenderStamp(order);
@@ -2917,7 +3064,6 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
       var titleEl = document.getElementById('stampMainTitle');
       var subDescEl = document.getElementById('stampSubDesc');
       var eyebrow = document.getElementById('stampTopEyebrow');
-      var waLbl = document.getElementById('garansiWaShortcutLabel');
       if (eyebrow) eyebrow.textContent = '🌸 ARCHIE\'PELAGO WARRANTY 🌸';
       if (subDescEl) subDescEl.classList.remove('truncate');
 
@@ -2926,281 +3072,180 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
         if (stampEl) stampEl.className = 'big-warranty-stamp stamp-void';
         if (titleEl) titleEl.textContent = 'GARANSI HANGUS';
         if (subDescEl) subDescEl.textContent = gui.stampVoidDesc;
-        if (waLbl) waLbl.textContent = 'Hubungi WA Mimin Archie';
       } else if (st === 'CLAIMED') {
         if (subDescEl) subDescEl.textContent = gui.stampClaimedDesc;
-        if (waLbl) waLbl.textContent = '🛠️ Lapor Kendala / Klaim Garansi';
       } else if (st === 'USED') {
         if (subDescEl) subDescEl.textContent = gui.stampUsedDesc;
-        if (waLbl) waLbl.textContent = '💬 Chat WA Mimin Archie';
       } else {
-        if (subDescEl) subDescEl.textContent = gui.stampUnclaimedDesc;
-        if (waLbl) waLbl.textContent = '📲 Kirim Bukti Aktivasi ke WA Mimin';
+        if (subDescEl) subDescEl.textContent = gui.stampUnclaimedDesc || '⚪ Garansi tercatat pada sistem Archie\'pelago.';
       }
+
+      var gTosLbl = document.getElementById('garansiTosBtnLabel');
+      if (gTosLbl && gui.tosBtnLabel) gTosLbl.textContent = gui.tosBtnLabel;
+      var firstIso = getOrPersistFirstPrintedIso(order);
+      var fpVal = document.getElementById('billFirstPrintedVal');
+      if (fpVal) fpVal.textContent = formatFullWibDateTime(firstIso);
 
       var paidEl = document.getElementById('billPaidAtValProd');
       if (paidEl && order) {
         var pd = order.paid_at || order.created_at;
-        if (pd) {
-          try {
-            paidEl.textContent = new Date(pd).toLocaleString('id-ID', {
-              day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
-            }) + ' WIB';
-          } catch (e) {}
-        }
-      }
-
-      var compEl = document.getElementById('compHoursBadgeProd');
-      var compH = Number(order && (order.compensation_hours_added || order.compHours) || 0);
-      if (compEl) {
-        if (compH > 0) {
-          compEl.classList.remove('hidden');
-          compEl.textContent = '✨ +' + compH + ' Jam Kompensasi Waktu Klaim Ditambahkan';
-        } else {
-          compEl.classList.add('hidden');
-        }
-      }
-
-      var bottomMsgEl = document.getElementById('bottomTicketSurpriseText');
-      if (bottomMsgEl && order && (order.surpriseMessage || order.surprise_message)) {
-        bottomMsgEl.textContent = order.surpriseMessage || order.surprise_message;
+        if (pd) paidEl.textContent = formatFullWibDateTime(pd);
       }
     };
 
-    // 7. TOTAL OVERHAUL: Off-Screen 420px Clean Print Stage for Crisp html2canvas PNG + Web Share API
-    function ensureGallerySaveModal() {
-      var m = document.getElementById('saveToGalleryPreviewModal');
-      if (m) return m;
-      m = document.createElement('div');
-      m.id = 'saveToGalleryPreviewModal';
-      m.className = 'garansi-modal-backdrop fixed inset-0 z-[98] flex items-center justify-center bg-[#3A1228]/75 backdrop-blur-sm p-4';
+    // 7. CRISP 420px IVORY PNG RECEIPT CAPTURE (First-Printed HH:mm:ss + Screenshot HH:mm:ss)
+    if (!document.getElementById('savePngPreviewModal')) {
+      var m = document.createElement('div');
+      m.id = 'savePngPreviewModal';
+      m.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(74,32,54,0.68);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:16px;';
       m.innerHTML =
-        '<div class="w-full max-w-[390px] bg-white rounded-[28px] border-[3px] border-[#D83162] p-4 space-y-3 shadow-2xl text-center max-h-[92dvh] overflow-y-auto">' +
-          '<div class="flex items-center justify-between border-b border-[#F7CFE0] pb-2 text-left">' +
-            '<div>' +
-              '<div class="text-[9px] font-black uppercase tracking-wider text-[#D83162]">📸 SIMPAN KE GALERI / PHOTOS HP</div>' +
-              '<div class="text-xs font-black text-[#4A2036]">Bukti Resmi Struk &amp; Tiket Garansi</div>' +
-            '</div>' +
-            '<button id="closeGalleryPreviewModalBtn" type="button" class="w-7 h-7 rounded-full bg-[#FFE5EE] text-[#4A2036] font-black text-xs flex items-center justify-center cursor-pointer">✕</button>' +
+        '<div class="w-full max-w-sm bg-white border-2 border-[#F5B8CE] rounded-[28px] p-4 shadow-2xl space-y-3 text-center max-h-[92vh] overflow-y-auto">' +
+          '<div class="flex items-center justify-between">' +
+            '<span class="text-[10px] font-black uppercase tracking-wider text-[#D83162]">📸 STRUK RESMI SIAP SIMPAN</span>' +
+            '<button id="closePngModalBtn" type="button" class="w-7 h-7 rounded-full bg-[#FFE0EC] text-[#4A2036] font-black text-xs cursor-pointer">✕</button>' +
           '</div>' +
-          '<div class="bg-[#FFF0F6] border border-[#F5B8CE] rounded-2xl p-2.5 text-[10.5px] font-bold text-[#4A2036] leading-snug text-left">' +
-            '📱 <b>Pengguna HP:</b> Klik <b>"Save Image / Simpan ke Foto"</b> pada menu yang muncul, atau <b>Tekan &amp; Tahan (Long-Press) gambar di bawah ini</b> lalu pilih <b>Simpan ke Foto / Galeri</b>.' +
-          '</div>' +
-          '<div class="bg-[#FFF8FA] p-2 rounded-2xl border border-[#F4A9C7] flex justify-center">' +
-            '<img id="galleryPreviewRenderedImg" src="" alt="Tiket Garansi Archie" class="max-h-[340px] w-auto rounded-xl shadow-md object-contain" />' +
-          '</div>' +
-          '<div class="grid grid-cols-2 gap-2">' +
-            '<button id="nativeShareToGalleryBtn" type="button" class="py-2.5 rounded-xl btn-berry text-[10.5px] font-black cursor-pointer">📱 Simpan ke Galeri HP</button>' +
-            '<a id="directDownloadDesktopLink" href="#" download="Tiket-Archie.png" class="py-2.5 rounded-xl bg-[#4A2036] text-[#FFE066] text-[10.5px] font-black flex items-center justify-center">💻 Unduh File (PC)</a>' +
+          '<img id="generatedPngPreviewImg" alt="Struk Garansi" class="w-full rounded-2xl border border-[#E5DCCB] shadow-md" />' +
+          '<div class="grid grid-cols-1 gap-2">' +
+            '<button id="nativeSharePngBtn" type="button" class="w-full py-2.5 rounded-xl btn-berry text-xs font-black cursor-pointer">📲 Simpan ke Galeri / Bagikan</button>' +
+            '<a id="directDownloadDesktopLink" href="#" download="Struk-Archiepelago.png" class="w-full py-2.5 rounded-xl bg-[#4A2036] text-[#FFE066] text-xs font-black text-center block">⬇️ Unduh Gambar PNG</a>' +
           '</div>' +
         '</div>';
       document.body.appendChild(m);
-      document.getElementById('closeGalleryPreviewModalBtn').addEventListener('click', function() { m.classList.remove('open'); });
-      m.addEventListener('click', function(e) { if (e.target === m) m.classList.remove('open'); });
-      return m;
+      document.getElementById('closePngModalBtn').addEventListener('click', function() { m.style.display = 'none'; });
+      m.addEventListener('click', function(e) { if (e.target === m) m.style.display = 'none'; });
     }
 
-    function buildOffScreenCleanPrintStage(order, stampTime) {
-      var existing = document.getElementById('archieOffscreenPrintStage');
-      if (existing) existing.remove();
+    function buildCleanPrintStage(order, firstPrintedTxt, ssNowTxt) {
+      var oldStage = document.getElementById('archieCleanPrintStage');
+      if (oldStage) oldStage.remove();
 
-      var code = order.orderCode || 'ARC-0001';
-      var cust = order.customerName || 'Customer';
-      var prod = order.productName || 'Layanan Premium';
-      var plan = order.cleanPlan || '1 Bulan';
-      var total = formatRp(order.finalPrice || 0);
-      var base = formatRp(order.basePrice || order.finalPrice || 0);
-      var disc = Number(order.discountPct || 0);
-      var st = (order.warrantyStatus || 'UNCLAIMED').toUpperCase();
-
+      var code = order.orderCode || order.order_code || 'ARC-0001';
+      var cust = order.initials || order.customerName || 'Customer';
+      var prod = order.productName || order.product_name || 'Aplikasi Premium';
+      var plan = order.cleanPlan || order.plan_label || '1 Bulan';
+      var total = formatRp(order.finalPrice || order.final_price || 0);
+      var st = String(order.warrantyStatus || order.warranty_status || 'UNCLAIMED').toUpperCase();
       var dVal = (document.getElementById('tDays') || {}).textContent || '00';
       var hVal = (document.getElementById('tHours') || {}).textContent || '00';
       var mVal = (document.getElementById('tMinutes') || {}).textContent || '00';
       var sVal = (document.getElementById('tSeconds') || {}).textContent || '00';
-      var paidTxt = (document.getElementById('billPaidAtValProd') || {}).textContent || '-';
       var expTxt = (document.getElementById('billExpiryDateText') || {}).textContent || '-';
 
-      var stampColors = {
-        CLAIMED: { bg: '#ECFDF5', border: '#059669', text: '#047857', title: 'SUDAH DIKLAIM' },
-        USED: { bg: '#FFF1F2', border: '#E11D48', text: '#BE123C', title: 'SUDAH DIGUNAKAN' },
-        VOID: { bg: '#FFE4E6', border: '#9F1239', text: '#881337', title: 'GARANSI HANGUS' },
-        UNCLAIMED: { bg: '#F8FAFC', border: '#64748B', text: '#475569', title: 'BELUM DIKLAIM' }
-      }[st] || { bg: '#F8FAFC', border: '#64748B', text: '#475569', title: 'BELUM DIKLAIM' };
-
-      function flatTwemcoCell(val, lbl) {
-        return (
-          '<div style="flex:1; background:#FFFFFF; border:2px solid #F3B6CD; border-radius:12px; padding:8px 4px; text-align:center; position:relative;">' +
-            '<div style="font-family:\'Space Mono\',monospace; font-size:22px; font-weight:800; color:#4A2036; line-height:1.1; position:relative;">' +
-              val +
-              '<div style="position:absolute; left:4px; right:4px; top:50%; height:1.5px; background:rgba(74,32,54,0.18);"></div>' +
-            '</div>' +
-            '<div style="font-size:8px; font-weight:800; color:#8E536D; margin-top:4px; letter-spacing:0.08em;">' + lbl + '</div>' +
-          '</div>'
-        );
-      }
+      var stampMap = {
+        CLAIMED: { bg: '#ECFDF5', border: '#10B981', text: '#047857', label: '🟢 GARANSI AKTIF' },
+        USED: { bg: '#FFF1F2', border: '#F43F5E', text: '#BE123C', label: '🔴 SUDAH DIGUNAKAN' },
+        VOID: { bg: '#FFE4E6', border: '#BE123C', text: '#881337', label: '🚫 GARANSI HANGUS' },
+        UNCLAIMED: { bg: '#FFF0F6', border: '#F472B6', text: '#9D174D', label: '⚪ BELUM DIKLAIM' }
+      };
+      var sm = stampMap[st] || stampMap.UNCLAIMED;
 
       var stage = document.createElement('div');
-      stage.id = 'archieOffscreenPrintStage';
-      stage.style.cssText =
-        'position:fixed; left:-9999px; top:0; width:420px; padding:18px; background:#FFF5F8;' +
-        'font-family:\'Plus Jakarta Sans\',sans-serif; color:#4A2036; box-sizing:border-box;';
-
+      stage.id = 'archieCleanPrintStage';
+      stage.style.cssText = 'position:fixed;left:-9999px;top:0;width:440px;padding:24px;background:linear-gradient(155deg,#FFE6F0 0%,#FFF5F9 52%,#FFDCEB 100%);font-family:"Plus Jakarta Sans","Quicksand",system-ui,sans-serif;color:#4A2036;box-sizing:border-box;';
       stage.innerHTML =
-        '<!-- STRUK THERMAL BERSIH (FLAT 2D, ZERO BLUR, ZERO 3D) -->' +
-        '<div style="background:#FFFFFF; border:2px solid #F4A9C7; border-radius:22px; padding:16px; box-shadow:0 6px 18px rgba(176,72,118,0.08);">' +
-          '<div style="text-align:center; border-bottom:2px dashed #F3C2D6; padding-bottom:12px; margin-bottom:12px;">' +
-            '<div style="display:inline-block; padding:3px 10px; border-radius:999px; background:#FFF0F6; border:1px solid #F5B8CE; color:#9B2358; font-size:9px; font-weight:800; letter-spacing:0.1em;">🌸 OFFICIAL E-RECEIPT 🌸</div>' +
-            '<div style="font-size:15px; font-weight:900; color:#4A2036; margin-top:6px;">🌸 ARCHIE\'PELAGO DIGITAL STORE 🌸</div>' +
-            '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-size:10px; font-weight:700; color:#6D3B53;">' +
-              '<span>Kasir: <strong style="color:#4A2036;">Mimin Archie 🐰</strong></span>' +
-              '<span style="background:#4A2036; color:#FFE066; padding:2px 8px; border-radius:6px; font-family:\'Space Mono\',monospace; font-weight:800;">' + code + '</span>' +
-            '</div>' +
+        '<div style="background:linear-gradient(180deg,#FFFFFF 0%,#FFFDF6 100%);border:2.5px solid #F2DCE2;border-radius:28px;overflow:hidden;box-shadow:0 16px 32px rgba(216,49,98,0.14);box-sizing:border-box;">' +
+          '<!-- TOP RIBBON HEADER -->' +
+          '<div style="background:linear-gradient(135deg,#D83162 0%,#FF6B98 100%);padding:18px 20px;text-align:center;color:#FFFFFF;">' +
+            '<div style="font-size:10px;font-weight:900;letter-spacing:2px;opacity:0.95;">🌸 ARCHIE\'PELAGO OFFICIAL TICKET 🌸</div>' +
+            '<div style="font-size:24px;font-weight:900;letter-spacing:1.2px;margin-top:4px;">' + code + '</div>' +
+            '<div style="display:inline-block;margin-top:8px;padding:5px 16px;border-radius:999px;background:' + sm.bg + ';border:2px solid ' + sm.border + ';color:' + sm.text + ';font-size:11px;font-weight:900;letter-spacing:0.4px;">' + sm.label + '</div>' +
           '</div>' +
 
-          '<div style="background:#FFF6FA; border:1.5px solid #F5C2D7; border-radius:14px; padding:10px 12px; font-size:11px; margin-bottom:12px;">' +
-            '<div style="display:flex; justify-content:space-between; padding-bottom:5px; border-bottom:1px dashed #F3C2D6;">' +
-              '<span style="color:#6D3B53; font-weight:700;">Pemegang Tiket:</span>' +
-              '<strong style="color:#4A2036;">' + cust + '</strong>' +
+          '<div style="padding:20px 22px;">' +
+            '<!-- DETAIL ORDER -->' +
+            '<div style="background:#FFFFFF;border:1.5px solid #F8D3E2;border-radius:18px;padding:12px 14px;margin-bottom:14px;">' +
+              '<table style="width:100%;border-collapse:collapse;font-size:12px;">' +
+                '<tr><td style="padding:5px 0;color:#8E4668;font-weight:700;">Customer</td><td style="padding:5px 0;text-align:right;font-weight:900;color:#4A2036;">' + cust + '</td></tr>' +
+                '<tr><td style="padding:5px 0;color:#8E4668;font-weight:700;">Layanan</td><td style="padding:5px 0;text-align:right;font-weight:900;color:#4A2036;">' + prod + '</td></tr>' +
+                '<tr><td style="padding:5px 0;color:#8E4668;font-weight:700;">Paket</td><td style="padding:5px 0;text-align:right;font-weight:800;color:#6D3B53;">' + plan + '</td></tr>' +
+                '<tr style="border-top:1.5px dashed #F5C6D8;"><td style="padding:8px 0 2px 0;color:#8E4668;font-weight:900;">Total Lunas</td><td style="padding:8px 0 2px 0;text-align:right;font-weight:900;color:#D83162;font-size:15px;">' + total + '</td></tr>' +
+              '</table>' +
             '</div>' +
-            '<div style="display:flex; justify-content:space-between; padding-top:5px;">' +
-              '<span style="color:#6D3B53; font-weight:700;">Layanan:</span>' +
-              '<strong style="color:#4A2036; text-align:right;">' + prod + '</strong>' +
-            '</div>' +
-            '<div style="display:flex; justify-content:space-between; padding-top:4px;">' +
-              '<span style="color:#6D3B53; font-weight:700;">Paket &amp; Durasi:</span>' +
-              '<strong style="color:#D83162; text-align:right;">' + plan + '</strong>' +
-            '</div>' +
-            '<div style="display:flex; justify-content:space-between; padding-top:4px;">' +
-              '<span style="color:#6D3B53; font-weight:700;">Waktu Lunas:</span>' +
-              '<strong style="color:#4A2036;">' + paidTxt + '</strong>' +
-            '</div>' +
-          '</div>' +
 
-          '<div style="background:#FFFFFF; border:1.5px solid #F5B8CE; border-radius:14px; padding:10px 12px; font-size:11px; margin-bottom:12px;">' +
-            '<div style="display:flex; justify-content:space-between; margin-bottom:4px;">' +
-              '<span style="color:#6D3B53; font-weight:700;">Harga Katalog / Diskon:</span>' +
-              '<strong style="color:#4A2036;">' + base + (disc > 0 ? (' (-' + disc + '%)') : '') + '</strong>' +
+            '<!-- 4-BOX TWEMCO COUNTDOWN -->' +
+            '<div style="background:linear-gradient(135deg,#4A2036 0%,#6E2A4D 100%);border-radius:20px;padding:14px 12px;text-align:center;margin-bottom:14px;color:#FFF5F8;">' +
+              '<div style="font-size:9.5px;font-weight:900;color:#FFE066;letter-spacing:1.2px;">⏳ SISA MASA AKTIF GARANSI</div>' +
+              '<table style="width:100%;border-collapse:separate;border-spacing:6px 0;margin-top:8px;"><tr>' +
+                '<td style="background:#2E1222;border:1px solid #FF85A9;border-radius:12px;padding:7px 4px;width:25%;"><div style="font-size:18px;font-weight:900;color:#FFFFFF;">' + dVal + '</div><div style="font-size:8px;font-weight:800;color:#FFB8D0;">HARI</div></td>' +
+                '<td style="background:#2E1222;border:1px solid #FF85A9;border-radius:12px;padding:7px 4px;width:25%;"><div style="font-size:18px;font-weight:900;color:#FFFFFF;">' + hVal + '</div><div style="font-size:8px;font-weight:800;color:#FFB8D0;">JAM</div></td>' +
+                '<td style="background:#2E1222;border:1px solid #FF85A9;border-radius:12px;padding:7px 4px;width:25%;"><div style="font-size:18px;font-weight:900;color:#FFFFFF;">' + mVal + '</div><div style="font-size:8px;font-weight:800;color:#FFB8D0;">MENIT</div></td>' +
+                '<td style="background:#2E1222;border:1px solid #FF85A9;border-radius:12px;padding:7px 4px;width:25%;"><div style="font-size:18px;font-weight:900;color:#FFFFFF;">' + sVal + '</div><div style="font-size:8px;font-weight:800;color:#FFB8D0;">DETIK</div></td>' +
+              '</tr></table>' +
+              '<div style="font-size:10px;font-weight:700;color:#FFD6E6;margin-top:8px;">Berakhir: ' + expTxt + '</div>' +
             '</div>' +
-            '<div style="display:flex; justify-content:space-between; align-items:center; padding-top:6px; border-top:1px dashed #F3B6CD;">' +
-              '<strong style="color:#4A2036;">TOTAL LUNAS:</strong>' +
-              '<span style="font-family:\'Space Mono\',monospace; font-size:16px; font-weight:900; color:#D83162;">' + total + ' ✅</span>' +
-            '</div>' +
-          '</div>' +
 
-          '<!-- FLAT 2D TWEMCO CLOCK CARD -->' +
-          '<div style="background:#FFF0F6; border:2px solid #F4A9C7; border-radius:16px; padding:10px;">' +
-            '<div style="display:flex; justify-content:space-between; align-items:center; font-size:9px; font-weight:900; color:#7A3E58; margin-bottom:8px;">' +
-              '<span>⏳ SISA DURASI LANGGANAN</span>' +
-              '<span>' + expTxt + '</span>' +
+            '<!-- PERFORATED DIVIDER + EXACT TIMESTAMPS -->' +
+            '<div style="border-top:2px dashed #F3B6CD;margin:12px 0;"></div>' +
+            '<div style="background:#FFFFFF;border:1.5px solid #F8D3E2;border-radius:16px;padding:10px 14px;font-size:10.5px;line-height:1.7;">' +
+              '<table style="width:100%;border-collapse:collapse;">' +
+                '<tr><td style="color:#8E4668;font-weight:800;">🗓️ Pertama Dicetak</td><td style="text-align:right;font-weight:900;color:#4A2036;">' + firstPrintedTxt + '</td></tr>' +
+                '<tr><td style="color:#8E4668;font-weight:800;">📸 Waktu Screenshot</td><td style="text-align:right;font-weight:900;color:#D83162;">' + ssNowTxt + '</td></tr>' +
+              '</table>' +
             '</div>' +
-            '<div style="display:flex; gap:8px;">' +
-              flatTwemcoCell(dVal, 'HARI') +
-              flatTwemcoCell(hVal, 'JAM') +
-              flatTwemcoCell(mVal, 'MENIT') +
-              flatTwemcoCell(sVal, 'DETIK') +
-            '</div>' +
-          '</div>' +
-        '</div>' +
 
-        '<!-- TIKET GARANSI BERLUBANG (CLEAN FLAT 2D) -->' +
-        '<div style="margin-top:14px; background:#FFFDF7; border:2px solid #F4A9C7; border-radius:20px; display:flex; overflow:hidden; position:relative;">' +
-          '<div style="width:30%; background:#FFEBF2; padding:14px 10px; border-right:2px dashed #F4A9C7; text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center;">' +
-            '<div style="font-size:8px; font-weight:900; color:#9B2358; letter-spacing:0.1em;">ARCHIE TICKET</div>' +
-            '<div style="font-size:20px; margin:6px 0;">🐰</div>' +
-            '<div style="font-family:\'Space Mono\',monospace; font-size:10px; font-weight:900; color:#4A2036;">' + code + '</div>' +
-            '<div style="font-size:8px; font-weight:700; color:#6D3B53; margin-top:2px;">GARANSI RESMI</div>' +
-          '</div>' +
-          '<div style="width:70%; padding:14px; text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center;">' +
-            '<div style="font-size:9px; font-weight:900; color:#D83162; letter-spacing:0.06em;">🎟️ TIKET KLAIM GARANSI CUSTOMER</div>' +
-            '<div style="margin:10px 0; padding:8px 14px; border:3px double ' + stampColors.border + '; background:' + stampColors.bg + '; color:' + stampColors.text + '; border-radius:12px; font-weight:900; font-size:13px; letter-spacing:0.06em;">' +
-              '🌸 ' + stampColors.title + ' 🌸' +
+            '<div style="text-align:center;margin-top:14px;font-size:10px;font-weight:900;color:#9A637B;letter-spacing:0.3px;">' +
+              '🐰 Archie\'pelago Digital Store • Struk &amp; Bukti Garansi Resmi 🌸' +
             '</div>' +
-            '<div style="font-size:9px; font-weight:700; color:#6D3B53;">' + prod + ' • ' + plan + '</div>' +
           '</div>' +
-        '</div>' +
-
-        '<!-- WATERMARK RESMI POJOK KANAN BAWAH -->' +
-        '<div style="margin-top:12px; text-align:right;">' +
-          '<span style="display:inline-block; background:#D83162; color:#FFFFFF; padding:5px 12px; border-radius:999px; font-size:10px; font-weight:800;">' +
-            'Disimpan Customer: ' + stampTime +
-          '</span>' +
         '</div>';
-
       document.body.appendChild(stage);
       return stage;
     }
 
-    var saveBtn = document.getElementById('saveReceiptImageBtn');
-    if (saveBtn) {
-      var cleanSaveBtn = saveBtn.cloneNode(true);
-      saveBtn.parentNode.replaceChild(cleanSaveBtn, saveBtn);
-      cleanSaveBtn.addEventListener('click', async function() {
-        var ord = (typeof activeOrder !== 'undefined' && activeOrder) ? activeOrder : null;
-        if (!ord) return;
-        var code = ord.orderCode || 'ARC-0001';
-        var pin = (document.getElementById('orderPinInput') || {}).value || '';
-        var stampTime = new Date().toLocaleString('id-ID', {
-          day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
-        }) + ' WIB';
-
-        showToast('📸 Mencetak gambar struk presisi untuk Galeri HP Kakak...', 'camHappy');
+    if (saveReceiptBtn) {
+      var cleanBtn = saveReceiptBtn.cloneNode(true);
+      saveReceiptBtn.parentNode.replaceChild(cleanBtn, saveReceiptBtn);
+      cleanBtn.addEventListener('click', async function() {
+        var ord = (typeof activeOrder !== 'undefined' && activeOrder) ? activeOrder : {};
+        var firstIso = getOrPersistFirstPrintedIso(ord);
+        var firstTxt = formatFullWibDateTime(firstIso);
+        var nowTxt = formatFullWibDateTime(new Date());
 
         try {
-          callSupabaseRpc('record_receipt_saved', { p_order_code: code, p_pin: pin });
-        } catch (e) {}
+          var code = ord.orderCode || ord.order_code || '';
+          var pin = ord.accessPin || ord.access_pin || (document.getElementById('orderPinInput') || {}).value || '';
+          if (typeof callSupabaseRpc === 'function' && code && pin) {
+            callSupabaseRpc('record_receipt_saved', { p_order_code: code, p_pin: pin });
+          }
+        } catch (_) {}
 
-        var stage = buildOffScreenCleanPrintStage(ord, stampTime);
+        var stage = buildCleanPrintStage(ord, firstTxt, nowTxt);
         var canvas = null;
         try {
-          if (document.fonts && document.fonts.ready) await document.fonts.ready;
           if (window.html2canvas) {
-            canvas = await window.html2canvas(stage, {
-              scale: 2,
-              useCORS: true,
-              backgroundColor: '#FFF5F8',
-              logging: false
-            });
+            canvas = await window.html2canvas(stage, { scale: 2, width: 440, windowWidth: 440, backgroundColor: '#FFF5F8', useCORS: true });
           }
-        } catch (e) {}
+        } catch (err) { console.warn('html2canvas err:', err); }
         stage.remove();
 
         if (!canvas) {
-          showToast('Maaf Kak, browser belum mendukung render gambar otomatis. Silakan screenshot layar yaa!', 'camShock');
+          showToast('Gagal merender gambar struk, coba refresh halaman yaa Kak!', 'camShock');
           return;
         }
-
         var dataUrl = canvas.toDataURL('image/png');
-        var blob = await new Promise(function(resolve) { canvas.toBlob(resolve, 'image/png'); });
-        var fileName = 'Tiket-Archie-' + code + '.png';
-        var imageFile = null;
-        try { imageFile = new File([blob], fileName, { type: 'image/png' }); } catch (e) {}
-
-        var modal = ensureGallerySaveModal();
-        var previewImg = document.getElementById('galleryPreviewRenderedImg');
-        var dlLink = document.getElementById('directDownloadDesktopLink');
-        var shareBtn = document.getElementById('nativeShareToGalleryBtn');
-        if (previewImg) previewImg.src = dataUrl;
-        if (dlLink) { dlLink.href = dataUrl; dlLink.download = fileName; }
+        var fileName = 'Archiepelago_' + (ord.orderCode || 'Struk') + '.png';
+        var imgEl = document.getElementById('generatedPngPreviewImg');
+        var dlEl = document.getElementById('directDownloadDesktopLink');
+        var shareBtn = document.getElementById('nativeSharePngBtn');
+        if (imgEl) imgEl.src = dataUrl;
+        if (dlEl) { dlEl.href = dataUrl; dlEl.download = fileName; }
         if (shareBtn) {
           shareBtn.onclick = async function() {
-            if (imageFile && navigator.canShare && navigator.canShare({ files: [imageFile] })) {
-              try {
-                await navigator.share({ files: [imageFile], title: 'Tiket Garansi ' + code });
-                showToast('📸 Berhasil membuka menu Simpan ke Foto / Galeri HP! 💗', 'camHappy');
+            try {
+              var blob = await (await fetch(dataUrl)).blob();
+              var file = new File([blob], fileName, { type: 'image/png' });
+              if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({ files: [file], title: fileName });
                 return;
-              } catch (err) {}
-            }
-            dlLink.click();
+              }
+            } catch (_) {}
+            var a = document.createElement('a');
+            a.href = dataUrl;
+            a.download = fileName;
+            a.click();
           };
         }
-        modal.classList.add('open');
-
-        if (imageFile && navigator.canShare && navigator.canShare({ files: [imageFile] })) {
-          try {
-            await navigator.share({ files: [imageFile], title: 'Tiket Garansi ' + code });
-            showToast('📸 Gambar struk siap disimpan ke Galeri Foto HP Kakak! 💗', 'camHappy');
-          } catch (e) {}
-        }
+        document.getElementById('savePngPreviewModal').style.display = 'flex';
       });
     }
 
