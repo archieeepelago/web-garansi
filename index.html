@@ -3101,10 +3101,34 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
       var fpVal = document.getElementById('billFirstPrintedVal');
       if (fpVal) fpVal.textContent = formatFullWibDateTime(firstIso);
 
+      // Parse Waktu Resmi Lunas (PAID_AT) & Waktu Resmi Pengiriman Archie (DELIV_AT)
+      var rawPlan = String((order && (order.rawPlanLabel || order.plan_label)) || '');
+      var mPaid = rawPlan.match(/PAID_AT:([^|\]]+)/i);
+      var mDeliv = rawPlan.match(/DELIV_AT:([^|\]]+)/i);
+      var officialPaidIso = (mPaid && mPaid[1]) ? mPaid[1].trim() : (order && order.paid_at ? order.paid_at : '');
+      var officialDelivIso = (mDeliv && mDeliv[1]) ? mDeliv[1].trim() : '';
+
+      var receiptCardEl = document.getElementById('receiptCaptureArea') || document.querySelector('.receipt-paper') || document.getElementById('printedReceiptCard');
+      if (receiptCardEl && !document.getElementById('billOfficialTimelineWrap')) {
+        var tlWrap = document.createElement('div');
+        tlWrap.id = 'billOfficialTimelineWrap';
+        tlWrap.className = 'mt-2.5 pt-2 border-t border-dashed border-[#E5C6D4] space-y-1 text-[10px] font-bold text-[#6D3B53]';
+        tlWrap.innerHTML =
+          '<div class="flex items-center justify-between gap-2"><span>💳 Waktu Resmi Lunas:</span><span id="billOfficialPaidVal" class="font-black text-[#4A2036] tabular-nums">-</span></div>' +
+          '<div class="flex items-center justify-between gap-2"><span>📦 Pengiriman Archie:</span><span id="billOfficialDelivVal" class="font-black text-[#D83162] tabular-nums">Menunggu Pengiriman...</span></div>';
+        receiptCardEl.appendChild(tlWrap);
+      }
+      var paidDisp = document.getElementById('billOfficialPaidVal');
+      if (paidDisp) paidDisp.textContent = officialPaidIso ? formatFullWibDateTime(officialPaidIso) : 'Menunggu Konfirmasi Lanjut...';
+      var delivDisp = document.getElementById('billOfficialDelivVal');
+      if (delivDisp) {
+        delivDisp.textContent = officialDelivIso ? formatFullWibDateTime(officialDelivIso) : 'Menunggu Pengiriman Archie...';
+        delivDisp.className = officialDelivIso ? 'font-black text-emerald-700 tabular-nums' : 'font-black text-amber-700 tabular-nums';
+      }
+
       var paidEl = document.getElementById('billPaidAtValProd');
-      if (paidEl && order) {
-        var pd = order.paid_at || order.created_at;
-        if (pd) paidEl.textContent = formatFullWibDateTime(pd);
+      if (paidEl && officialPaidIso) {
+        paidEl.textContent = formatFullWibDateTime(officialPaidIso);
       }
     };
 
