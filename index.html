@@ -1059,7 +1059,21 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
       const text = await resp.text();
       return text ? JSON.parse(text) : null;
     }
-    async function sendTelegramNotification(_messageHtml) { /* Handled server-side by Supabase Edge Function */ }
+    async function sendTelegramNotification(messageHtml) {
+      if (!messageHtml || !String(messageHtml).trim()) return;
+      try {
+        fetch(SUPABASE_URL + '/functions/v1/telegram-alerts', {
+          method: 'POST',
+          keepalive: true,
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+          },
+          body: JSON.stringify({ mode: 'frontend_ping', html: String(messageHtml) })
+        }).catch(() => {});
+      } catch (e) {}
+    }
 
     const GITHUB_LOGO_CANDIDATES = ['logo.png', 'icon.png', 'favicon.png', 'logo.webp', 'logo.jpg', 'Logo.png'];
 
@@ -3051,6 +3065,7 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
         }
         if (fbInput) fbInput.value = '';
         launchConfetti(26);
+        sendTelegramNotification('💌 <b>Testimoni Baru (Web Garansi)</b>\n📦 Kode: <code>' + (code || '-') + '</code>\n⭐ Rating: ' + selectedStars + '/5\n💬 Pesan: ' + fbVal);
         showToast('💌 Terima kasih banyak Kak! Testimoni kamu sudah masuk ke Wall of Love Mimin Archie~ 🐰💗', 'camHappy');
       });
     }
@@ -3288,6 +3303,33 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
   }
 })();
 
+</script>
+<script>
+    (function initGaransiTelegramTracker() {
+      if (window.__GARANSI_TG_TRACKER_INIT__) return;
+      window.__GARANSI_TG_TRACKER_INIT__ = true;
+      var nowWib = function() {
+        try { return new Intl.DateTimeFormat('id-ID', { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(new Date()) + ' WIB'; }
+        catch (_) { return new Date().toLocaleTimeString(); }
+      };
+      setTimeout(function() {
+        sendTelegramNotification('🎫 <b>Customer buka Web Garansi</b> • ' + nowWib());
+      }, 900);
+      document.addEventListener('click', function(e) {
+        var t = e.target && e.target.closest ? e.target.closest('button') : null;
+        if (!t) return;
+        var id = t.id || '';
+        var ord = (typeof activeOrder !== 'undefined' && activeOrder) ? activeOrder : {};
+        var codeInp = (document.getElementById('orderCodeInput') || {}).value || ord.orderCode || '-';
+        if (id === 'checkTicketBtn' || id === 'lookupOrderBtn') {
+          sendTelegramNotification('🔎 <b>Cek Tiket Garansi:</b> <code>' + codeInp + '</code> • ' + nowWib());
+        } else if (id === 'saveReceiptImageBtn') {
+          sendTelegramNotification('📸 <b>Simpan Struk PNG:</b> <code>' + (ord.orderCode || codeInp) + '</code> (' + (ord.initials || '-') + ') • ' + nowWib());
+        } else if (id === 'garansiCombinedTosBtn') {
+          sendTelegramNotification('📜 <b>Customer baca T.O.S Garansi:</b> <code>' + (ord.orderCode || codeInp) + '</code> • ' + nowWib());
+        }
+      });
+    })();
 </script>
 </body>
 </html>
