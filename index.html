@@ -3212,119 +3212,605 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
       m.addEventListener('click', function(e) { if (e.target === m) m.style.display = 'none'; });
     }
 
-    function buildCleanPrintStage(order, firstPrintedTxt, ssNowTxt) {
-      var oldStage = document.getElementById('archieCleanPrintStage');
-      if (oldStage) oldStage.remove();
+    async function renderPixelPerfectGaransiCanvas(order, firstPrintedTxt, ssNowTxt) {
+      var W = 420;
+      var S = 2; // Crisp 2x Retina (840px wide)
+      var padX = 16;
+      var cardW = W - padX * 2; // 388px
 
-      var page1 = document.getElementById('garansiPage1');
-      var partA = page1 ? page1.firstElementChild : null;
-      var partB = document.getElementById('gBand5');
+      // Read live values directly from DOM & order
+      var code = (order && (order.orderCode || order.order_code)) || (document.getElementById('billOrderCodeText') || {}).textContent || 'ARC-0001';
+      var custName = ((document.getElementById('billCustomerName') || {}).textContent || (order && (order.initials || order.customerName)) || 'Customer').trim();
+      var isDonatur = !!(document.getElementById('billDonaturBadge') && !document.getElementById('billDonaturBadge').classList.contains('hidden'));
+      var prodName = ((document.getElementById('billProductName') || {}).textContent || (order && order.productName) || 'Aplikasi Premium').trim();
+      var planTxt = ((document.getElementById('gUnit7') || {}).textContent || (order && order.cleanPlan) || '1 Bulan').trim();
+      var basePriceTxt = ((document.getElementById('billBasePriceText') || {}).textContent || 'Rp 0').trim();
+      var discPillTxt = ((document.getElementById('billDiscountPill') || {}).textContent || '').trim();
+      var showDisc = !!(document.getElementById('billDiscountPill') && !document.getElementById('billDiscountPill').classList.contains('hidden') && discPillTxt);
+      var showDon = !!(document.getElementById('billDonationRow') && !document.getElementById('billDonationRow').classList.contains('hidden'));
+      var donTxt = ((document.getElementById('billDonationText') || {}).textContent || '').trim();
+      var totalTxt = ((document.getElementById('billTotalPriceText') || {}).textContent || 'Rp 0').trim();
+      var paidAtTxt = ((document.getElementById('billOfficialPaidVal') || {}).textContent || '-').trim();
+      var delivAtTxt = ((document.getElementById('billOfficialDelivVal') || {}).textContent || 'Menunggu Pengiriman...').trim();
 
-      var stage = document.createElement('div');
-      stage.id = 'archieCleanPrintStage';
-      stage.style.cssText =
-        'position:fixed;left:-9999px;top:0;width:420px;padding:18px 15px 16px 15px;' +
-        'background:linear-gradient(180deg,#FFF5F8 0%,#FFECF3 55%,#FFE0EC 100%);' +
-        'font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#4A2036;' +
-        'display:flex;flex-direction:column;align-items:center;gap:14px;box-sizing:border-box;';
+      var dVal = ((document.getElementById('tDays') || {}).textContent || '00').trim();
+      var hVal = ((document.getElementById('tHours') || {}).textContent || '00').trim();
+      var mVal = ((document.getElementById('tMinutes') || {}).textContent || '00').trim();
+      var sVal = ((document.getElementById('tSeconds') || {}).textContent || '00').trim();
+      var timerStatusTxt = ((document.getElementById('timerStatusPill') || {}).textContent || 'AKTIF • LIVE').trim();
+      var startTxt = ((document.getElementById('billCreatedDateText') || {}).textContent || 'Mulai: Hari ini').trim();
+      var expTxt = ((document.getElementById('billExpiryDateText') || {}).textContent || 'Berlaku s/d -').trim();
+      var progEl = document.getElementById('timerProgressBar');
+      var progPct = progEl ? Math.max(0, Math.min(100, parseFloat(progEl.style.width) || 0)) : 90;
 
-      // 1. Clone actual Part A (Printer Slot + Ticket-Vibe Bill + Twemco Flip Clock + Official Timestamps)
-      if (partA) {
-        var cloneA = partA.cloneNode(true);
-        cloneA.style.width = '100%';
-        cloneA.style.maxWidth = '390px';
-        cloneA.style.margin = '0';
+      var st = String((order && (order.warrantyStatus || order.warranty_status)) || 'UNCLAIMED').toUpperCase();
+      var stampTitle = ((document.getElementById('stampMainTitle') || {}).textContent || 'BELUM DIKLAIM').trim();
+      var stampDesc = ((document.getElementById('stampSubDesc') || {}).textContent || '⚪ Garansi tercatat pada sistem Archie\'pelago.').trim();
+      var ticketTitle = ((document.getElementById('ticketProdTitle') || {}).textContent || (prodName + ' • ' + planTxt)).trim();
 
-        // Remove UI-only replay/skip buttons in screenshot
-        ['skipPrintAnimBtn', 'replayPrintAnimBtn'].forEach(function(rmId) {
-          var el = cloneA.querySelector('#' + rmId);
-          if (el) el.remove();
-        });
+      var stampColors = {
+        CLAIMED: { fg: '#059669', bg: '#ECFDF5' },
+        USED: { fg: '#E11D48', bg: '#FFF1F2' },
+        VOID: { fg: '#9F1239', bg: '#FFE4E6' },
+        UNCLAIMED: { fg: '#64748B', bg: '#F1F5F9' }
+      };
+      var sc = stampColors[st] || stampColors.UNCLAIMED;
 
-        // Force all animated print bands/units fully open & visible
-        cloneA.querySelectorAll('.print-band').forEach(function(b) {
-          b.style.maxHeight = 'none';
-          b.style.opacity = '1';
-          b.style.transform = 'none';
-          b.style.overflow = 'visible';
-        });
-        cloneA.querySelectorAll('.print-unit').forEach(function(u) {
-          u.style.opacity = '1';
-          u.style.transform = 'none';
-        });
-
-        // Flatten 3D split-flap flip cards into exact 2D Twemco visuals so html2canvas renders digits razor-sharp
-        var flipMap = [
-          { unitId: 'flipUnitDays', valId: 'tDays' },
-          { unitId: 'flipUnitHours', valId: 'tHours' },
-          { unitId: 'flipUnitMinutes', valId: 'tMinutes' },
-          { unitId: 'flipUnitSeconds', valId: 'tSeconds' }
-        ];
-        flipMap.forEach(function(fm) {
-          var liveValEl = document.getElementById(fm.valId);
-          var digitTxt = liveValEl ? String(liveValEl.textContent || '00').trim() : '00';
-          var fc = cloneA.querySelector('#' + fm.unitId);
-          if (fc) {
-            fc.classList.remove('is-flipping');
-            fc.style.cssText = 'position:relative;width:100%;height:34px;border-radius:7px;overflow:hidden;background:linear-gradient(180deg,#F2729C 0%,#DF4B7C 49%,#C62D5E 51%,#E04A7A 100%);display:flex;align-items:center;justify-content:center;';
-            fc.innerHTML =
-              '<div style="position:relative;z-index:2;font-family:\'Space Mono\',\'Plus Jakarta Sans\',monospace;font-size:18px;font-weight:900;line-height:1;color:#FFFFFF;text-shadow:0 1.5px 3px rgba(84,12,40,0.35);">' + digitTxt + '</div>' +
-              '<div style="position:absolute;left:0;right:0;top:50%;height:1.5px;margin-top:-0.75px;background:rgba(68,10,32,0.58);z-index:3;"></div>';
+      // Helper to measure wrapped lines on a scratch context
+      var scratch = document.createElement('canvas').getContext('2d');
+      function wrapLines(ctx, text, maxW, fontStr) {
+        ctx.font = fontStr;
+        var words = String(text || '').split(/\s+/);
+        var lines = [], cur = '';
+        for (var i = 0; i < words.length; i++) {
+          var test = cur ? (cur + ' ' + words[i]) : words[i];
+          if (ctx.measureText(test).width > maxW && cur) {
+            lines.push(cur);
+            cur = words[i];
+          } else {
+            cur = test;
           }
-        });
-
-        stage.appendChild(cloneA);
+        }
+        if (cur) lines.push(cur);
+        return lines.length ? lines : [''];
+      }
+      function fitText(ctx, text, maxW) {
+        var str = String(text || '');
+        if (ctx.measureText(str).width <= maxW) return str;
+        while (str.length > 3 && ctx.measureText(str + '…').width > maxW) str = str.slice(0, -1);
+        return str + '…';
+      }
+      function roundRectPath(ctx, x, y, w, h, r) {
+        var tl = typeof r === 'number' ? r : (r.tl || 0);
+        var tr = typeof r === 'number' ? r : (r.tr || 0);
+        var br = typeof r === 'number' ? r : (r.br || 0);
+        var bl = typeof r === 'number' ? r : (r.bl || 0);
+        ctx.beginPath();
+        ctx.moveTo(x + tl, y);
+        ctx.lineTo(x + w - tr, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + tr);
+        ctx.lineTo(x + w, y + h - br);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - br, y + h);
+        ctx.lineTo(x + bl, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - bl);
+        ctx.lineTo(x, y + tl);
+        ctx.quadraticCurveTo(x, y, x + tl, y);
+        ctx.closePath();
       }
 
-      // 2. Clone actual Part B (Perforated Cinema Warranty Ticket + Tilted Rubber Stamp)
-      if (partB) {
-        var cloneB = partB.cloneNode(true);
-        cloneB.style.width = '100%';
-        cloneB.style.maxWidth = '390px';
-        cloneB.style.maxHeight = 'none';
-        cloneB.style.opacity = '1';
-        cloneB.style.transform = 'none';
-        cloneB.style.overflow = 'visible';
-        cloneB.style.margin = '0';
+      // Compute dynamic heights so nothing EVER overflows
+      var descFont = '700 9.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      var rightStubW = cardW * 0.73;
+      var descLines = wrapLines(scratch, stampDesc, rightStubW - 34, descFont);
+      var ticketH = Math.max(152, 118 + descLines.length * 14);
+      var priceBoxH = showDon ? 94 : 78;
+      var billBodyH = 68 + 118 + priceBoxH + 132 + 24;
+      var topY = 16;
+      var printerH = 34;
+      var cardABottom = topY + printerH + billBodyH;
+      var ticketY = cardABottom + 16;
+      var tsBarY = ticketY + ticketH + 14;
+      var tsBarH = 58;
+      var H = tsBarY + tsBarH + 18;
 
-        var cardB = cloneB.querySelector('.ticket-card');
-        if (cardB) {
-          cardB.style.opacity = '1';
-          cardB.style.transform = 'none';
-          cardB.style.boxShadow = '0 10px 20px rgba(138, 38, 82, 0.14)';
-        }
-        var unit15 = cloneB.querySelector('#gUnit15');
-        if (unit15) {
-          unit15.style.opacity = '1';
-          unit15.style.transform = 'none';
-        }
-        var stampB = cloneB.querySelector('#bigRubberStamp');
-        if (stampB) {
-          stampB.style.animation = 'none';
-          stampB.style.opacity = '0.96';
-          stampB.style.transform = 'rotate(-7deg)';
-        }
-        stage.appendChild(cloneB);
+      var canvas = document.createElement('canvas');
+      canvas.width = Math.round(W * S);
+      canvas.height = Math.round(H * S);
+      var ctx = canvas.getContext('2d');
+      ctx.scale(S, S);
+
+      // 1. Background pastel gradient
+      var bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+      bgGrad.addColorStop(0, '#FFF5F8');
+      bgGrad.addColorStop(0.55, '#FFECF3');
+      bgGrad.addColorStop(1, '#FFE0EC');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      // 2. Printer Slot Top Header
+      var pGrad = ctx.createLinearGradient(padX, topY, padX + cardW, topY);
+      pGrad.addColorStop(0, '#4A1831');
+      pGrad.addColorStop(0.5, '#7A234D');
+      pGrad.addColorStop(1, '#4A1831');
+      roundRectPath(ctx, padX, topY, cardW, printerH, { tl: 18, tr: 18, bl: 0, br: 0 });
+      ctx.fillStyle = pGrad;
+      ctx.fill();
+      ctx.strokeStyle = '#FF9EBB';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Live green dot + printer title
+      ctx.beginPath();
+      ctx.arc(padX + 16, topY + 15, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#34D399';
+      ctx.fill();
+      ctx.font = '800 9.5px "Space Mono", monospace';
+      ctx.fillStyle = '#FFE5EE';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText("ARCHIE'PELAGO E-TICKET BILL", padX + 26, topY + 15);
+      // Slit bar
+      roundRectPath(ctx, padX + 6, topY + printerH - 6, cardW - 12, 6, 3);
+      ctx.fillStyle = '#230916';
+      ctx.fill();
+
+      // 3. Bill Paper Card
+      var billY = topY + printerH - 2;
+      ctx.save();
+      ctx.shadowColor = 'rgba(138, 38, 82, 0.13)';
+      ctx.shadowBlur = 18;
+      ctx.shadowOffsetY = 8;
+      roundRectPath(ctx, padX, billY, cardW, billBodyH, { tl: 4, tr: 4, bl: 20, br: 20 });
+      var paperGrad = ctx.createLinearGradient(0, billY, 0, billY + billBodyH);
+      paperGrad.addColorStop(0, '#FFFFFF');
+      paperGrad.addColorStop(1, '#FFFDF6');
+      ctx.fillStyle = paperGrad;
+      ctx.fill();
+      ctx.restore();
+      roundRectPath(ctx, padX, billY, cardW, billBodyH, { tl: 4, tr: 4, bl: 20, br: 20 });
+      ctx.strokeStyle = '#F2DCE2';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Clip interior & draw Bill sections
+      var cy = billY + 14;
+      // Admit One pill
+      var admitTxt = 'ADMIT ONE • OFFICIAL E-RECEIPT';
+      ctx.font = '800 8px "Space Mono", monospace';
+      var admitW = ctx.measureText(admitTxt).width + 22;
+      roundRectPath(ctx, W / 2 - admitW / 2, cy, admitW, 16, 8);
+      ctx.fillStyle = '#FFF0F6';
+      ctx.fill();
+      ctx.strokeStyle = '#F5B8CE';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.fillStyle = '#9B2358';
+      ctx.textAlign = 'center';
+      ctx.fillText(admitTxt, W / 2, cy + 8);
+      cy += 26;
+
+      ctx.font = '900 13px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#4A2036';
+      ctx.fillText("🌸 ARCHIE'PELAGO DIGITAL STORE 🌸", W / 2, cy);
+      cy += 18;
+
+      // Kasir + Order Code pill
+      ctx.textAlign = 'left';
+      ctx.font = '700 9.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#8E536D';
+      ctx.fillText('Kasir: ', padX + 14, cy);
+      var kW = ctx.measureText('Kasir: ').width;
+      ctx.font = '800 9.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#4A2036';
+      ctx.fillText('Mimin Archie 🐰', padX + 14 + kW, cy);
+
+      ctx.font = '800 9.5px "Space Mono", monospace';
+      var codeW = ctx.measureText(code).width + 18;
+      roundRectPath(ctx, padX + cardW - 14 - codeW, cy - 9, codeW, 18, 6);
+      ctx.fillStyle = '#4A2036';
+      ctx.fill();
+      ctx.fillStyle = '#FFE066';
+      ctx.textAlign = 'center';
+      ctx.fillText(code, padX + cardW - 14 - codeW / 2, cy);
+      cy += 16;
+
+      // Dashed tear divider 1
+      ctx.save();
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(padX + 10, cy);
+      ctx.lineTo(padX + cardW - 10, cy);
+      ctx.strokeStyle = '#E5A4BE';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.restore();
+      cy += 12;
+
+      // Band 2: Customer & Order Details Box
+      var boxX = padX + 14, boxW = cardW - 28;
+      roundRectPath(ctx, boxX, cy, boxW, 108, 12);
+      ctx.fillStyle = '#FFF6FA';
+      ctx.fill();
+      ctx.strokeStyle = '#F5C2D7';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      var detailRows = [
+        { l: 'Pemegang Tiket:', r: isDonatur ? (custName + ' 👑') : custName, c: '#4A2036' },
+        { l: 'Layanan / Produk:', r: prodName, c: '#4A2036' },
+        { l: 'Paket & Durasi:', r: planTxt, c: '#D83162' },
+        { l: 'Waktu Resmi Lunas:', r: paidAtTxt, c: '#4A2036' },
+        { l: 'Pengiriman Archie:', r: delivAtTxt, c: delivAtTxt.indexOf('Menunggu') >= 0 ? '#B45309' : '#047857' }
+      ];
+      var ry = cy + 14;
+      detailRows.forEach(function(row) {
+        ctx.textAlign = 'left';
+        ctx.font = '700 9.5px "Plus Jakarta Sans", system-ui, sans-serif';
+        ctx.fillStyle = '#7A4961';
+        ctx.fillText(row.l, boxX + 10, ry);
+        ctx.textAlign = 'right';
+        ctx.font = '800 9.5px "Plus Jakarta Sans", system-ui, sans-serif';
+        ctx.fillStyle = row.c;
+        ctx.fillText(fitText(ctx, row.r, boxW - 125), boxX + boxW - 10, ry);
+        ry += 20;
+      });
+      cy += 118;
+
+      // Band 3: Price Breakdown Box
+      roundRectPath(ctx, boxX, cy, boxW, priceBoxH, 12);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fill();
+      ctx.strokeStyle = '#F5B8CE';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      var py = cy + 14;
+      ctx.textAlign = 'left';
+      ctx.font = '600 9.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#7A4961';
+      ctx.fillText('Harga Katalog / Diskon:', boxX + 10, py);
+      ctx.textAlign = 'right';
+      ctx.font = '800 9.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#4A2036';
+      ctx.fillText(showDisc ? (basePriceTxt + ' (' + discPillTxt + ')') : basePriceTxt, boxX + boxW - 10, py);
+      py += 18;
+
+      ctx.textAlign = 'left';
+      ctx.font = '600 9.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#7A4961';
+      ctx.fillText('Biaya Layanan & Garansi:', boxX + 10, py);
+      ctx.textAlign = 'right';
+      ctx.font = '800 9.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#059669';
+      ctx.fillText('Rp 0 (FREE)', boxX + boxW - 10, py);
+      py += 16;
+
+      if (showDon) {
+        ctx.textAlign = 'left';
+        ctx.font = '700 9.5px "Plus Jakarta Sans", system-ui, sans-serif';
+        ctx.fillStyle = '#9B2358';
+        ctx.fillText('Donasi Umur Server (Donatur):', boxX + 10, py);
+        ctx.textAlign = 'right';
+        ctx.fillText(donTxt, boxX + boxW - 10, py);
+        py += 16;
       }
 
-      // 3. Matching Pastel Screenshot Timestamp Bar (Full dd/MM/yyyy HH:mm:ss WIB)
-      var tsBar = document.createElement('div');
-      tsBar.style.cssText =
-        'width:100%;max-width:390px;background:rgba(255,255,255,0.92);border:1.5px solid #F3B6CD;' +
-        'border-radius:16px;padding:9px 13px;box-sizing:border-box;box-shadow:0 6px 14px rgba(158,39,86,0.09);';
-      tsBar.innerHTML =
-        '<div style="display:flex;align-items:center;justify-content:space-between;font-size:9.5px;line-height:1.5;color:#7A4961;font-weight:700;">' +
-          '<span>📸 Waktu Screenshot:</span>' +
-          '<span style="font-weight:900;color:#D83162;font-family:\'Space Mono\',monospace;">' + ssNowTxt + '</span>' +
-        '</div>' +
-        '<div style="display:flex;align-items:center;justify-content:space-between;font-size:9px;line-height:1.5;color:#8E536D;font-weight:700;margin-top:2px;padding-top:3px;border-top:1px dashed #F3C2D6;">' +
-          '<span>🗓️ Pertama Dicetak:</span>' +
-          '<span style="font-weight:800;color:#4A2036;font-family:\'Space Mono\',monospace;">' + firstPrintedTxt + '</span>' +
-        '</div>';
-      stage.appendChild(tsBar);
+      ctx.save();
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(boxX + 10, py - 4);
+      ctx.lineTo(boxX + boxW - 10, py - 4);
+      ctx.strokeStyle = '#F3B6CD';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.restore();
+      py += 12;
 
-      document.body.appendChild(stage);
-      return stage;
+      ctx.textAlign = 'left';
+      ctx.font = '900 10.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#4A2036';
+      ctx.fillText('TOTAL PEMBAYARAN:', boxX + 10, py);
+      ctx.textAlign = 'right';
+      ctx.font = '900 14px "Space Mono", monospace';
+      ctx.fillStyle = '#D83162';
+      ctx.fillText(totalTxt, boxX + boxW - 10, py);
+      var totW = ctx.measureText(totalTxt).width;
+      roundRectPath(ctx, boxX + boxW - 16 - totW - 48, py - 8, 44, 15, 7.5);
+      ctx.fillStyle = '#D1FAE5';
+      ctx.fill();
+      ctx.textAlign = 'center';
+      ctx.font = '900 7.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#047857';
+      ctx.fillText('LUNAS', boxX + boxW - 16 - totW - 26, py - 0.5);
+      cy += priceBoxH + 12;
+
+      // Band 4: Twemco Retro Flip Clock Casing
+      var clkH = 114;
+      roundRectPath(ctx, boxX, cy, boxW, clkH, 18);
+      var clkGrad = ctx.createLinearGradient(0, cy, 0, cy + clkH);
+      clkGrad.addColorStop(0, '#FDFBFC');
+      clkGrad.addColorStop(1, '#EBE0E6');
+      ctx.fillStyle = clkGrad;
+      ctx.fill();
+      ctx.strokeStyle = '#E2C6D2';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Inner acrylic bezel
+      roundRectPath(ctx, boxX + 6, cy + 6, boxW - 12, clkH - 12, 13);
+      ctx.fillStyle = '#F4EAEF';
+      ctx.fill();
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Timer header + pill
+      ctx.textAlign = 'left';
+      ctx.font = '900 8.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#7A3E58';
+      ctx.fillText('⏳ SISA DURASI LANGGANAN', boxX + 14, cy + 18);
+      ctx.font = '900 7.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      var stPillW = ctx.measureText(timerStatusTxt).width + 14;
+      roundRectPath(ctx, boxX + boxW - 14 - stPillW, cy + 11, stPillW, 14, 7);
+      ctx.fillStyle = '#FFE0EC';
+      ctx.fill();
+      ctx.strokeStyle = '#F3B6CD';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#B82555';
+      ctx.fillText(timerStatusTxt, boxX + boxW - 14 - stPillW / 2, cy + 18);
+
+      // 4 Split-Flap Windows
+      var units = [
+        { v: dVal, l: 'HARI' },
+        { v: hVal, l: 'JAM' },
+        { v: mVal, l: 'MENIT' },
+        { v: sVal, l: 'DETIK' }
+      ];
+      var slotGap = 7;
+      var slotW = (boxW - 28 - slotGap * 3) / 4;
+      var slotY = cy + 30;
+      units.forEach(function(u, idx) {
+        var sx = boxX + 14 + idx * (slotW + slotGap);
+        roundRectPath(ctx, sx, slotY, slotW, 48, 9);
+        ctx.fillStyle = '#A8204D';
+        ctx.fill();
+        // Top half flap
+        roundRectPath(ctx, sx + 3, slotY + 3, slotW - 6, 16, { tl: 6, tr: 6, bl: 0, br: 0 });
+        ctx.fillStyle = '#E85D8A';
+        ctx.fill();
+        // Bottom half flap
+        roundRectPath(ctx, sx + 3, slotY + 19, slotW - 6, 16, { tl: 0, tr: 0, bl: 6, br: 6 });
+        ctx.fillStyle = '#D43E6F';
+        ctx.fill();
+        // Digit
+        ctx.textAlign = 'center';
+        ctx.font = '900 17px "Space Mono", monospace';
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillText(u.v, sx + slotW / 2, slotY + 19.5);
+        // Center seam line
+        ctx.fillStyle = 'rgba(68, 10, 32, 0.55)';
+        ctx.fillRect(sx + 3, slotY + 18.5, slotW - 6, 1.5);
+        // Label
+        ctx.font = '800 6.5px "Plus Jakarta Sans", system-ui, sans-serif';
+        ctx.fillStyle = '#FFE8F1';
+        ctx.fillText(u.l, sx + slotW / 2, slotY + 42);
+      });
+
+      // Progress bar + dates
+      var barY = slotY + 55;
+      roundRectPath(ctx, boxX + 14, barY, boxW - 28, 5, 2.5);
+      ctx.fillStyle = '#E5D4DC';
+      ctx.fill();
+      var fillW = Math.max(4, ((boxW - 28) * progPct) / 100);
+      roundRectPath(ctx, boxX + 14, barY, fillW, 5, 2.5);
+      var pbGrad = ctx.createLinearGradient(boxX + 14, barY, boxX + boxW - 14, barY);
+      pbGrad.addColorStop(0, '#D83162');
+      pbGrad.addColorStop(1, '#FF85A9');
+      ctx.fillStyle = pbGrad;
+      ctx.fill();
+
+      ctx.font = '800 7.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#8A5A70';
+      ctx.textAlign = 'left';
+      ctx.fillText(fitText(ctx, startTxt, (boxW - 36) / 2), boxX + 14, barY + 13);
+      ctx.textAlign = 'right';
+      ctx.fillText(fitText(ctx, expTxt, (boxW - 36) / 2), boxX + boxW - 14, barY + 13);
+
+      // Bottom bill corner scoops
+      [padX, padX + cardW].forEach(function(cxScoop) {
+        ctx.beginPath();
+        ctx.arc(cxScoop, billY + billBodyH, 8, 0, Math.PI * 2);
+        ctx.fillStyle = '#FFE5F0';
+        ctx.fill();
+        ctx.strokeStyle = '#F3B6CD';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+
+      // 4. PART B: Perforated Cinema Warranty Ticket
+      ctx.save();
+      ctx.shadowColor = 'rgba(138, 38, 82, 0.14)';
+      ctx.shadowBlur = 16;
+      ctx.shadowOffsetY = 7;
+      roundRectPath(ctx, padX, ticketY, cardW, ticketH, 18);
+      ctx.fillStyle = '#FFFDF8';
+      ctx.fill();
+      ctx.restore();
+
+      // Clip ticket interior for left stub & border
+      ctx.save();
+      roundRectPath(ctx, padX, ticketY, cardW, ticketH, 18);
+      ctx.clip();
+
+      var stubW = Math.round(cardW * 0.27);
+      var stubGrad = ctx.createLinearGradient(padX, ticketY, padX, ticketY + ticketH);
+      stubGrad.addColorStop(0, '#FFF0F6');
+      stubGrad.addColorStop(1, '#FFE4F0');
+      ctx.fillStyle = stubGrad;
+      ctx.fillRect(padX, ticketY, stubW, ticketH);
+
+      // Vertical dashed perforation line
+      ctx.save();
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(padX + stubW, ticketY + 8);
+      ctx.lineTo(padX + stubW, ticketY + ticketH - 8);
+      ctx.strokeStyle = '#E5A4BE';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.restore();
+
+      // Left stub contents
+      var stubCx = padX + stubW / 2;
+      ctx.textAlign = 'center';
+      ctx.font = '900 7.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#9B2358';
+      ctx.fillText('ARCHIE TICKET', stubCx, ticketY + 20);
+
+      // Circular avatar
+      var avR = 20, avCy = ticketY + ticketH / 2 - 4;
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(stubCx, avCy, avR, 0, Math.PI * 2);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fill();
+      ctx.strokeStyle = '#F5B8CE';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.clip();
+      var avImg = document.getElementById('ticketStubAvatarImg');
+      if (avImg && avImg.complete && avImg.naturalWidth > 0) {
+        try { ctx.drawImage(avImg, stubCx - avR, avCy - avR, avR * 2, avR * 2); } catch (_) {}
+      }
+      ctx.restore();
+
+      ctx.font = '900 9px "Space Mono", monospace';
+      ctx.fillStyle = '#4A2036';
+      ctx.fillText(code, stubCx, ticketY + ticketH - 26);
+      ctx.font = '700 7px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#8E536D';
+      ctx.fillText('GARANSI RESMI', stubCx, ticketY + ticketH - 14);
+
+      // Right body contents
+      var rx = padX + stubW + 14;
+      var rw = cardW - stubW - 26;
+      ctx.textAlign = 'left';
+      ctx.font = '900 8px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#D83162';
+      ctx.fillText('🎟️ TIKET KLAIM GARANSI CUSTOMER', rx, ticketY + 18);
+      ctx.font = '900 10.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#4A2036';
+      ctx.fillText(fitText(ctx, ticketTitle, rw), rx, ticketY + 33);
+
+      // Tilted Double-Border Rubber Stamp
+      var stCx = rx + rw / 2;
+      var stCy = ticketY + 72;
+      ctx.save();
+      ctx.translate(stCx, stCy);
+      ctx.rotate(-7 * Math.PI / 180);
+      var stW = Math.min(rw - 12, 186), stH = 40;
+      roundRectPath(ctx, -stW / 2, -stH / 2, stW, stH, 10);
+      ctx.fillStyle = sc.bg;
+      ctx.fill();
+      ctx.strokeStyle = sc.fg;
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+      roundRectPath(ctx, -stW / 2 + 3.5, -stH / 2 + 3.5, stW - 7, stH - 7, 7);
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.textAlign = 'center';
+      ctx.fillStyle = sc.fg;
+      ctx.font = '800 6.5px "Space Mono", monospace';
+      ctx.fillText("🌸 ARCHIE'PELAGO WARRANTY 🌸", 0, -7);
+      ctx.font = '900 12px "Space Mono", monospace';
+      ctx.fillText(stampTitle, 0, 8);
+      ctx.restore();
+
+      // Dashed divider + multi-line wrapped description
+      var descTop = ticketY + 105;
+      ctx.save();
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(rx, descTop);
+      ctx.lineTo(rx + rw, descTop);
+      ctx.strokeStyle = '#F3C2D6';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.textAlign = 'center';
+      ctx.font = descFont;
+      ctx.fillStyle = '#7A4961';
+      descLines.forEach(function(ln, li) {
+        ctx.fillText(ln, rx + rw / 2, descTop + 13 + li * 13.5);
+      });
+      ctx.restore(); // end ticket clip
+
+      // Ticket outer border
+      roundRectPath(ctx, padX, ticketY, cardW, ticketH, 18);
+      ctx.strokeStyle = '#F2DCE2';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // 4 Ticket corner scoops + Top/Bottom perforation notches
+      [
+        [padX, ticketY, 9], [padX + cardW, ticketY, 9],
+        [padX, ticketY + ticketH, 9], [padX + cardW, ticketY + ticketH, 9],
+        [padX + stubW, ticketY, 10], [padX + stubW, ticketY + ticketH, 10]
+      ].forEach(function(pt) {
+        ctx.beginPath();
+        ctx.arc(pt[0], pt[1], pt[2], 0, Math.PI * 2);
+        ctx.fillStyle = '#FFE5F0';
+        ctx.fill();
+        ctx.strokeStyle = '#F3B6CD';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+
+      // 5. Bottom Screenshot Timestamp Bar
+      roundRectPath(ctx, padX, tsBarY, cardW, tsBarH, 16);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
+      ctx.fill();
+      ctx.strokeStyle = '#F3B6CD';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.textAlign = 'left';
+      ctx.font = '700 9.5px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#7A4961';
+      ctx.fillText('📸 Waktu Screenshot:', padX + 14, tsBarY + 16);
+      ctx.textAlign = 'right';
+      ctx.font = '900 9.5px "Space Mono", monospace';
+      ctx.fillStyle = '#D83162';
+      ctx.fillText(ssNowTxt, padX + cardW - 14, tsBarY + 16);
+
+      ctx.save();
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(padX + 14, tsBarY + 27);
+      ctx.lineTo(padX + cardW - 14, tsBarY + 27);
+      ctx.strokeStyle = '#F3C2D6';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.textAlign = 'left';
+      ctx.font = '700 9px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#8E536D';
+      ctx.fillText('🗓️ Pertama Dicetak:', padX + 14, tsBarY + 38);
+      ctx.textAlign = 'right';
+      ctx.font = '800 9px "Space Mono", monospace';
+      ctx.fillStyle = '#4A2036';
+      ctx.fillText(firstPrintedTxt, padX + cardW - 14, tsBarY + 38);
+
+      ctx.textAlign = 'center';
+      ctx.font = '800 8px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.fillStyle = '#9A637B';
+      ctx.fillText("🌸 Archie'pelago Digital Store • Official E-Receipt & Warranty 🌸", W / 2, tsBarY + 51);
+
+      return canvas;
     }
 
     if (saveReceiptBtn) {
@@ -3345,14 +3831,10 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
           }
         } catch (_) {}
 
-        var stage = buildCleanPrintStage(ord, firstTxt, nowTxt);
         var canvas = null;
         try {
-          if (window.html2canvas) {
-            canvas = await window.html2canvas(stage, { scale: 2.5, width: 420, windowWidth: 420, backgroundColor: '#FFE8F2', useCORS: true });
-          }
-        } catch (err) { console.warn('html2canvas err:', err); }
-        stage.remove();
+          canvas = await renderPixelPerfectGaransiCanvas(ord, firstTxt, nowTxt);
+        } catch (err) { console.warn('canvas receipt err:', err); }
 
         if (!canvas) {
           showToast('Gagal merender gambar struk, coba refresh halaman yaa Kak!', 'camShock');
@@ -3458,6 +3940,9 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
         }
       });
     })();
+</script>
+<script>
+  (function() { window.name = 'archie_web_garansi'; })();
 </script>
 </body>
 </html>
