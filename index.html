@@ -3216,75 +3216,113 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
       var oldStage = document.getElementById('archieCleanPrintStage');
       if (oldStage) oldStage.remove();
 
-      var code = order.orderCode || order.order_code || 'ARC-0001';
-      var cust = order.initials || order.customerName || 'Customer';
-      var prod = order.productName || order.product_name || 'Aplikasi Premium';
-      var plan = order.cleanPlan || order.plan_label || '1 Bulan';
-      var total = formatRp(order.finalPrice || order.final_price || 0);
-      var st = String(order.warrantyStatus || order.warranty_status || 'UNCLAIMED').toUpperCase();
-      var dVal = (document.getElementById('tDays') || {}).textContent || '00';
-      var hVal = (document.getElementById('tHours') || {}).textContent || '00';
-      var mVal = (document.getElementById('tMinutes') || {}).textContent || '00';
-      var sVal = (document.getElementById('tSeconds') || {}).textContent || '00';
-      var expTxt = (document.getElementById('billExpiryDateText') || {}).textContent || '-';
-
-      var stampMap = {
-        CLAIMED: { bg: '#ECFDF5', border: '#10B981', text: '#047857', label: '🟢 GARANSI AKTIF' },
-        USED: { bg: '#FFF1F2', border: '#F43F5E', text: '#BE123C', label: '🔴 SUDAH DIGUNAKAN' },
-        VOID: { bg: '#FFE4E6', border: '#BE123C', text: '#881337', label: '🚫 GARANSI HANGUS' },
-        UNCLAIMED: { bg: '#FFF0F6', border: '#F472B6', text: '#9D174D', label: '⚪ BELUM DIKLAIM' }
-      };
-      var sm = stampMap[st] || stampMap.UNCLAIMED;
+      var page1 = document.getElementById('garansiPage1');
+      var partA = page1 ? page1.firstElementChild : null;
+      var partB = document.getElementById('gBand5');
 
       var stage = document.createElement('div');
       stage.id = 'archieCleanPrintStage';
-      stage.style.cssText = 'position:fixed;left:-9999px;top:0;width:440px;padding:24px;background:linear-gradient(155deg,#FFE6F0 0%,#FFF5F9 52%,#FFDCEB 100%);font-family:"Plus Jakarta Sans","Quicksand",system-ui,sans-serif;color:#4A2036;box-sizing:border-box;';
-      stage.innerHTML =
-        '<div style="background:linear-gradient(180deg,#FFFFFF 0%,#FFFDF6 100%);border:2.5px solid #F2DCE2;border-radius:28px;overflow:hidden;box-shadow:0 16px 32px rgba(216,49,98,0.14);box-sizing:border-box;">' +
-          '<!-- TOP RIBBON HEADER -->' +
-          '<div style="background:linear-gradient(135deg,#D83162 0%,#FF6B98 100%);padding:18px 20px;text-align:center;color:#FFFFFF;">' +
-            '<div style="font-size:10px;font-weight:900;letter-spacing:2px;opacity:0.95;">🌸 ARCHIE\'PELAGO OFFICIAL TICKET 🌸</div>' +
-            '<div style="font-size:24px;font-weight:900;letter-spacing:1.2px;margin-top:4px;">' + code + '</div>' +
-            '<div style="display:inline-block;margin-top:8px;padding:5px 16px;border-radius:999px;background:' + sm.bg + ';border:2px solid ' + sm.border + ';color:' + sm.text + ';font-size:11px;font-weight:900;letter-spacing:0.4px;">' + sm.label + '</div>' +
-          '</div>' +
+      stage.style.cssText =
+        'position:fixed;left:-9999px;top:0;width:420px;padding:18px 15px 16px 15px;' +
+        'background:linear-gradient(180deg,#FFF5F8 0%,#FFECF3 55%,#FFE0EC 100%);' +
+        'font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#4A2036;' +
+        'display:flex;flex-direction:column;align-items:center;gap:14px;box-sizing:border-box;';
 
-          '<div style="padding:20px 22px;">' +
-            '<!-- DETAIL ORDER -->' +
-            '<div style="background:#FFFFFF;border:1.5px solid #F8D3E2;border-radius:18px;padding:12px 14px;margin-bottom:14px;">' +
-              '<table style="width:100%;border-collapse:collapse;font-size:12px;">' +
-                '<tr><td style="padding:5px 0;color:#8E4668;font-weight:700;">Customer</td><td style="padding:5px 0;text-align:right;font-weight:900;color:#4A2036;">' + cust + '</td></tr>' +
-                '<tr><td style="padding:5px 0;color:#8E4668;font-weight:700;">Layanan</td><td style="padding:5px 0;text-align:right;font-weight:900;color:#4A2036;">' + prod + '</td></tr>' +
-                '<tr><td style="padding:5px 0;color:#8E4668;font-weight:700;">Paket</td><td style="padding:5px 0;text-align:right;font-weight:800;color:#6D3B53;">' + plan + '</td></tr>' +
-                '<tr style="border-top:1.5px dashed #F5C6D8;"><td style="padding:8px 0 2px 0;color:#8E4668;font-weight:900;">Total Lunas</td><td style="padding:8px 0 2px 0;text-align:right;font-weight:900;color:#D83162;font-size:15px;">' + total + '</td></tr>' +
-              '</table>' +
-            '</div>' +
+      // 1. Clone actual Part A (Printer Slot + Ticket-Vibe Bill + Twemco Flip Clock + Official Timestamps)
+      if (partA) {
+        var cloneA = partA.cloneNode(true);
+        cloneA.style.width = '100%';
+        cloneA.style.maxWidth = '390px';
+        cloneA.style.margin = '0';
 
-            '<!-- 4-BOX TWEMCO COUNTDOWN -->' +
-            '<div style="background:linear-gradient(135deg,#4A2036 0%,#6E2A4D 100%);border-radius:20px;padding:14px 12px;text-align:center;margin-bottom:14px;color:#FFF5F8;">' +
-              '<div style="font-size:9.5px;font-weight:900;color:#FFE066;letter-spacing:1.2px;">⏳ SISA MASA AKTIF GARANSI</div>' +
-              '<table style="width:100%;border-collapse:separate;border-spacing:6px 0;margin-top:8px;"><tr>' +
-                '<td style="background:#2E1222;border:1px solid #FF85A9;border-radius:12px;padding:7px 4px;width:25%;"><div style="font-size:18px;font-weight:900;color:#FFFFFF;">' + dVal + '</div><div style="font-size:8px;font-weight:800;color:#FFB8D0;">HARI</div></td>' +
-                '<td style="background:#2E1222;border:1px solid #FF85A9;border-radius:12px;padding:7px 4px;width:25%;"><div style="font-size:18px;font-weight:900;color:#FFFFFF;">' + hVal + '</div><div style="font-size:8px;font-weight:800;color:#FFB8D0;">JAM</div></td>' +
-                '<td style="background:#2E1222;border:1px solid #FF85A9;border-radius:12px;padding:7px 4px;width:25%;"><div style="font-size:18px;font-weight:900;color:#FFFFFF;">' + mVal + '</div><div style="font-size:8px;font-weight:800;color:#FFB8D0;">MENIT</div></td>' +
-                '<td style="background:#2E1222;border:1px solid #FF85A9;border-radius:12px;padding:7px 4px;width:25%;"><div style="font-size:18px;font-weight:900;color:#FFFFFF;">' + sVal + '</div><div style="font-size:8px;font-weight:800;color:#FFB8D0;">DETIK</div></td>' +
-              '</tr></table>' +
-              '<div style="font-size:10px;font-weight:700;color:#FFD6E6;margin-top:8px;">Berakhir: ' + expTxt + '</div>' +
-            '</div>' +
+        // Remove UI-only replay/skip buttons in screenshot
+        ['skipPrintAnimBtn', 'replayPrintAnimBtn'].forEach(function(rmId) {
+          var el = cloneA.querySelector('#' + rmId);
+          if (el) el.remove();
+        });
 
-            '<!-- PERFORATED DIVIDER + EXACT TIMESTAMPS -->' +
-            '<div style="border-top:2px dashed #F3B6CD;margin:12px 0;"></div>' +
-            '<div style="background:#FFFFFF;border:1.5px solid #F8D3E2;border-radius:16px;padding:10px 14px;font-size:10.5px;line-height:1.7;">' +
-              '<table style="width:100%;border-collapse:collapse;">' +
-                '<tr><td style="color:#8E4668;font-weight:800;">🗓️ Pertama Dicetak</td><td style="text-align:right;font-weight:900;color:#4A2036;">' + firstPrintedTxt + '</td></tr>' +
-                '<tr><td style="color:#8E4668;font-weight:800;">📸 Waktu Screenshot</td><td style="text-align:right;font-weight:900;color:#D83162;">' + ssNowTxt + '</td></tr>' +
-              '</table>' +
-            '</div>' +
+        // Force all animated print bands/units fully open & visible
+        cloneA.querySelectorAll('.print-band').forEach(function(b) {
+          b.style.maxHeight = 'none';
+          b.style.opacity = '1';
+          b.style.transform = 'none';
+          b.style.overflow = 'visible';
+        });
+        cloneA.querySelectorAll('.print-unit').forEach(function(u) {
+          u.style.opacity = '1';
+          u.style.transform = 'none';
+        });
 
-            '<div style="text-align:center;margin-top:14px;font-size:10px;font-weight:900;color:#9A637B;letter-spacing:0.3px;">' +
-              '🐰 Archie\'pelago Digital Store • Struk &amp; Bukti Garansi Resmi 🌸' +
-            '</div>' +
-          '</div>' +
+        // Flatten 3D split-flap flip cards into exact 2D Twemco visuals so html2canvas renders digits razor-sharp
+        var flipMap = [
+          { unitId: 'flipUnitDays', valId: 'tDays' },
+          { unitId: 'flipUnitHours', valId: 'tHours' },
+          { unitId: 'flipUnitMinutes', valId: 'tMinutes' },
+          { unitId: 'flipUnitSeconds', valId: 'tSeconds' }
+        ];
+        flipMap.forEach(function(fm) {
+          var liveValEl = document.getElementById(fm.valId);
+          var digitTxt = liveValEl ? String(liveValEl.textContent || '00').trim() : '00';
+          var fc = cloneA.querySelector('#' + fm.unitId);
+          if (fc) {
+            fc.classList.remove('is-flipping');
+            fc.style.cssText = 'position:relative;width:100%;height:34px;border-radius:7px;overflow:hidden;background:linear-gradient(180deg,#F2729C 0%,#DF4B7C 49%,#C62D5E 51%,#E04A7A 100%);display:flex;align-items:center;justify-content:center;';
+            fc.innerHTML =
+              '<div style="position:relative;z-index:2;font-family:\'Space Mono\',\'Plus Jakarta Sans\',monospace;font-size:18px;font-weight:900;line-height:1;color:#FFFFFF;text-shadow:0 1.5px 3px rgba(84,12,40,0.35);">' + digitTxt + '</div>' +
+              '<div style="position:absolute;left:0;right:0;top:50%;height:1.5px;margin-top:-0.75px;background:rgba(68,10,32,0.58);z-index:3;"></div>';
+          }
+        });
+
+        stage.appendChild(cloneA);
+      }
+
+      // 2. Clone actual Part B (Perforated Cinema Warranty Ticket + Tilted Rubber Stamp)
+      if (partB) {
+        var cloneB = partB.cloneNode(true);
+        cloneB.style.width = '100%';
+        cloneB.style.maxWidth = '390px';
+        cloneB.style.maxHeight = 'none';
+        cloneB.style.opacity = '1';
+        cloneB.style.transform = 'none';
+        cloneB.style.overflow = 'visible';
+        cloneB.style.margin = '0';
+
+        var cardB = cloneB.querySelector('.ticket-card');
+        if (cardB) {
+          cardB.style.opacity = '1';
+          cardB.style.transform = 'none';
+          cardB.style.boxShadow = '0 10px 20px rgba(138, 38, 82, 0.14)';
+        }
+        var unit15 = cloneB.querySelector('#gUnit15');
+        if (unit15) {
+          unit15.style.opacity = '1';
+          unit15.style.transform = 'none';
+        }
+        var stampB = cloneB.querySelector('#bigRubberStamp');
+        if (stampB) {
+          stampB.style.animation = 'none';
+          stampB.style.opacity = '0.96';
+          stampB.style.transform = 'rotate(-7deg)';
+        }
+        stage.appendChild(cloneB);
+      }
+
+      // 3. Matching Pastel Screenshot Timestamp Bar (Full dd/MM/yyyy HH:mm:ss WIB)
+      var tsBar = document.createElement('div');
+      tsBar.style.cssText =
+        'width:100%;max-width:390px;background:rgba(255,255,255,0.92);border:1.5px solid #F3B6CD;' +
+        'border-radius:16px;padding:9px 13px;box-sizing:border-box;box-shadow:0 6px 14px rgba(158,39,86,0.09);';
+      tsBar.innerHTML =
+        '<div style="display:flex;align-items:center;justify-content:space-between;font-size:9.5px;line-height:1.5;color:#7A4961;font-weight:700;">' +
+          '<span>📸 Waktu Screenshot:</span>' +
+          '<span style="font-weight:900;color:#D83162;font-family:\'Space Mono\',monospace;">' + ssNowTxt + '</span>' +
+        '</div>' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;font-size:9px;line-height:1.5;color:#8E536D;font-weight:700;margin-top:2px;padding-top:3px;border-top:1px dashed #F3C2D6;">' +
+          '<span>🗓️ Pertama Dicetak:</span>' +
+          '<span style="font-weight:800;color:#4A2036;font-family:\'Space Mono\',monospace;">' + firstPrintedTxt + '</span>' +
         '</div>';
+      stage.appendChild(tsBar);
+
       document.body.appendChild(stage);
       return stage;
     }
@@ -3296,7 +3334,8 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
         var ord = (typeof activeOrder !== 'undefined' && activeOrder) ? activeOrder : {};
         var firstIso = getOrPersistFirstPrintedIso(ord);
         var firstTxt = formatFullWibDateTime(firstIso);
-        var nowTxt = formatFullWibDateTime(new Date());
+        var nowDate = new Date(Date.now() + (typeof serverNowOffsetMs === 'number' ? serverNowOffsetMs : 0));
+        var nowTxt = formatFullWibDateTime(nowDate);
 
         try {
           var code = ord.orderCode || ord.order_code || '';
@@ -3310,7 +3349,7 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
         var canvas = null;
         try {
           if (window.html2canvas) {
-            canvas = await window.html2canvas(stage, { scale: 2, width: 440, windowWidth: 440, backgroundColor: '#FFF5F8', useCORS: true });
+            canvas = await window.html2canvas(stage, { scale: 2.5, width: 420, windowWidth: 420, backgroundColor: '#FFE8F2', useCORS: true });
           }
         } catch (err) { console.warn('html2canvas err:', err); }
         stage.remove();
