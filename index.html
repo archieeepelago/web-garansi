@@ -3184,6 +3184,21 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
         delivDisp.className = officialDelivIso ? 'font-black text-emerald-700 tabular-nums' : 'font-black text-amber-700 tabular-nums';
       }
 
+      // Sinkronkan Pesan Manis Mimin Archie dari Admin (jika kosong, otomatis pakai template default)
+      var bottomMsgEl = document.getElementById('bottomTicketSurpriseText');
+      if (bottomMsgEl) {
+        var customSweet = (order && order.surpriseMsg) ? String(order.surpriseMsg).trim() : '';
+        if (!customSweet) {
+          var mMsg = rawPlan.match(/\|MSG:([^|\]]+)/i);
+          if (mMsg && mMsg[1]) {
+            try { customSweet = decodeURIComponent(mMsg[1]).trim(); } catch (_) { customSweet = mMsg[1].trim(); }
+          }
+        }
+        var defaultSweet = (window.ARCHIE_DEFAULT_CMS && window.ARCHIE_DEFAULT_CMS.garansiUi && window.ARCHIE_DEFAULT_CMS.garansiUi.bottomBoxDefaultMsg)
+          || "Makasih banyak udah langganan di Archie'pelago!! Semoga awet & lancar terus yaa~ 🐰💗✨";
+        bottomMsgEl.textContent = customSweet || defaultSweet;
+      }
+
       var paidEl = document.getElementById('billPaidAtValProd');
       if (paidEl && officialPaidIso) {
         paidEl.textContent = formatFullWibDateTime(officialPaidIso);
