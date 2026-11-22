@@ -3942,7 +3942,24 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
     })();
 </script>
 <script>
-  (function() { window.name = 'archie_web_garansi'; })();
+  (function() {
+    window.name = 'archie_web_garansi';
+    // Auto-Icon GitHub Loader: tinggal upload icon-garansi.png / garansi-icon.png / logo.png / icon.png ke GitHub!
+    var candidates = ['./icon-garansi.png', './garansi-icon.png', './logo.png', './icon.png', './favicon.png', './favicon.ico'];
+    (function tryNext(i) {
+      if (i >= candidates.length) return;
+      var img = new Image();
+      img.onload = function() {
+        var href = candidates[i] + '?v=' + Date.now();
+        var fav = document.getElementById('siteFaviconLink') || document.querySelector('link[rel="icon"]');
+        var app = document.getElementById('siteAppleIconLink') || document.querySelector('link[rel="apple-touch-icon"]');
+        if (fav) fav.href = href;
+        if (app) app.href = href;
+      };
+      img.onerror = function() { tryNext(i + 1); };
+      img.src = candidates[i];
+    })(0);
+  })();
 </script>
 </body>
 </html>
