@@ -2673,22 +2673,27 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
       return JSON.parse(JSON.stringify(DEFAULT_CMS));
     },
 
+    current: null,
     fetchLive: async function(sbUrl, sbAnonKey) {
       var localCfg = this.getCached();
-      if (!sbUrl || !sbAnonKey) return localCfg;
+      this.current = localCfg;
+      var url = sbUrl || window.ARCHIE_SUPABASE_URL || '';
+      var key = sbAnonKey || window.ARCHIE_SUPABASE_ANON_KEY || '';
+      if (!url || !key) return localCfg;
       try {
-        var resp = await fetch(sbUrl + '/rest/v1/store_cms_config?id=eq.live&select=config_json,version,updated_at', {
+        var resp = await fetch(url + '/rest/v1/store_cms_config?id=eq.live&select=config_json,updated_at&_t=' + Date.now(), {
+          cache: 'no-store',
           headers: {
-            'apikey': sbAnonKey,
-            'Authorization': 'Bearer ' + sbAnonKey
+            'apikey': key,
+            'Authorization': 'Bearer ' + key
           }
         });
         if (resp.ok) {
           var rows = await resp.json();
           if (Array.isArray(rows) && rows[0] && rows[0].config_json && Object.keys(rows[0].config_json).length > 0) {
             var merged = deepMerge(DEFAULT_CMS, rows[0].config_json);
-            merged.version = rows[0].version || merged.version || 1;
             merged.updatedAt = rows[0].updated_at || merged.updatedAt;
+            this.current = merged;
             try { localStorage.setItem('archie_live_cms_config', JSON.stringify(merged)); } catch (e) {}
             return merged;
           }
@@ -3908,8 +3913,10 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
     }
 
     applyCmsConfigToGaransi(liveCms);
-    if (typeof SUPABASE_URL !== 'undefined' && typeof SUPABASE_ANON_KEY !== 'undefined') {
-      window.ArchieLiveCms.fetchLive(SUPABASE_URL, SUPABASE_ANON_KEY).then(applyCmsConfigToGaransi);
+    var liveSbUrl = window.ARCHIE_SUPABASE_URL || (typeof SUPABASE_URL !== 'undefined' ? SUPABASE_URL : '');
+    var liveSbKey = window.ARCHIE_SUPABASE_ANON_KEY || (typeof SUPABASE_ANON_KEY !== 'undefined' ? SUPABASE_ANON_KEY : '');
+    if (liveSbUrl && liveSbKey) {
+      window.ArchieLiveCms.fetchLive(liveSbUrl, liveSbKey).then(applyCmsConfigToGaransi);
     }
     window.addEventListener('storage', function(e) {
       if (e.key === 'archie_live_cms_config') {
