@@ -2681,7 +2681,7 @@ const SUPABASE_URL = "https://xtpganxptyaxeydqxnky.supabase.co";
       var key = sbAnonKey || window.ARCHIE_SUPABASE_ANON_KEY || '';
       if (!url || !key) return localCfg;
       try {
-        var resp = await fetch(url + '/rest/v1/store_cms_config?id=eq.live&select=config_json,updated_at&_t=' + Date.now(), {
+        var resp = await fetch(url + '/rest/v1/store_cms_config?id=eq.live&select=config_json,updated_at', {
           cache: 'no-store',
           headers: {
             'apikey': key,
